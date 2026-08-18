@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Augusto Alves Brasil — Product Design &amp; UX Engineering</title>
-<meta name="description" content="Product Designer & UX Engineer com raízes em Gestão de TI. Portfólio de Augusto Alves Brasil — Plataforma Brasil, Caixa Econômica Federal, Digibee Academy e ferramentas próprias.">
+<meta name="description" content="Product Designer &amp; UX Engineer com raízes em Gestão de TI. AI Building, Vibe Coding e ferramentas próprias — Plataforma Brasil, Caixa Econômica Federal, Digibee Academy.">
 <link rel="icon" href="data:,">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -97,6 +97,7 @@
     border: 1px solid var(--line);
     color: var(--ink-dim);
     transition: border-color 0.3s ease, color 0.3s ease;
+    white-space: nowrap;
   }
   .row-hover:hover .tag { border-color: var(--accent); color: var(--accent); }
 
@@ -110,7 +111,7 @@
   }
   .skillbar-fill.is-visible { width: var(--target-width); }
 
-  .theme-toggle {
+  .icon-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -123,12 +124,19 @@
     transition: border-color 0.2s ease, transform 0.2s ease;
     flex-shrink: 0;
     padding: 0;
+    color: var(--ink);
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 12px;
   }
-  .theme-toggle:hover { border-color: var(--accent); transform: rotate(20deg); }
-  .theme-toggle svg { stroke: var(--ink); transition: stroke 0.3s ease; display: block; }
-  .theme-toggle .icon-moon { display: none; }
-  html[data-theme="light"] .theme-toggle .icon-sun { display: none; }
-  html[data-theme="light"] .theme-toggle .icon-moon { display: block; }
+  .icon-btn:hover { border-color: var(--accent); transform: rotate(20deg); }
+  .icon-btn svg { stroke: var(--ink); transition: stroke 0.3s ease; display: block; }
+  .icon-btn .icon-moon { display: none; }
+  html[data-theme="light"] .icon-btn .icon-sun { display: none; }
+  html[data-theme="light"] .icon-btn .icon-moon { display: block; }
+
+  .lang-btn { border-radius: 999px; }
+  .lang-btn:hover { transform: none; }
 
   @keyframes pulse-glow {
     0%, 100% { opacity: var(--glow-opacity); transform: scale(1); }
@@ -155,6 +163,8 @@
   .reveal-stagger.is-visible > *:nth-child(5) { transition-delay: 0.28s; }
   .reveal-stagger.is-visible > *:nth-child(6) { transition-delay: 0.34s; }
   .reveal-stagger.is-visible > *:nth-child(7) { transition-delay: 0.4s; }
+  .reveal-stagger.is-visible > *:nth-child(8) { transition-delay: 0.46s; }
+  .reveal-stagger.is-visible > *:nth-child(9) { transition-delay: 0.52s; }
 
   @keyframes rise-in {
     from { opacity: 0; transform: translateY(18px); }
@@ -181,8 +191,61 @@
       opacity: 1 !important; transform: none !important; animation: none !important; transition: none !important;
     }
     .skillbar-fill { width: var(--target-width) !important; }
-    .btn-primary:hover, .btn-ghost:hover, .theme-toggle:hover { transform: none; }
+    .btn-primary:hover, .btn-ghost:hover, .icon-btn:hover { transform: none; }
   }
+
+  /* Placeholder visual tiles for pending screenshots */
+  .shot-placeholder {
+    aspect-ratio: 16/10;
+    border-radius: 8px;
+    border: 1px dashed var(--line);
+    background: var(--bg-raised);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    color: var(--ink-dim);
+    text-align: center;
+    padding: 20px;
+  }
+  .shot-placeholder svg { opacity: 0.5; }
+  .shot-placeholder span { font-size: 12px; font-family: 'Barlow', monospace; }
+
+  /* Process carousel */
+  .carousel-track {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: var(--line) transparent;
+  }
+  .carousel-track::-webkit-scrollbar { height: 6px; }
+  .carousel-track::-webkit-scrollbar-thumb { background: var(--line); border-radius: 999px; }
+  .carousel-slide {
+    scroll-snap-align: start;
+    flex: 0 0 auto;
+    width: 380px;
+  }
+  .carousel-nav {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+  }
+  .carousel-arrow {
+    width: 40px; height: 40px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: transparent;
+    color: var(--ink);
+    display: inline-flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.2s ease, transform 0.15s ease;
+  }
+  .carousel-arrow:hover { border-color: var(--accent); transform: scale(1.06); }
 
   /* Responsive */
   .nav-links { display: flex; align-items: center; gap: 40px; }
@@ -191,17 +254,24 @@
   .process-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 20px; }
   .skills-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; }
   .contact-row { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
-  .hero-title { font-size: 58px; line-height: 1.1; }
+  .hero-title { font-size: 56px; line-height: 1.1; }
+  .ai-row { display: flex; align-items: center; gap: 56px; }
+  .links-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; }
+  .cert-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
 
   @media (max-width: 960px) {
-    .wrap { padding-left: 28px; padding-right: 28px; }
+    .wrap { padding-left: 24px; padding-right: 24px; }
     .nav-links { display: none; }
-    .hero-title { font-size: 36px; }
+    .hero-title { font-size: 34px; }
     .hero-row { flex-direction: column; }
     .work-row { grid-template-columns: 1fr; }
     .process-grid { grid-template-columns: 1fr 1fr; }
     .skills-grid { grid-template-columns: 1fr; }
     .contact-row { flex-direction: column; align-items: flex-start; }
+    .ai-row { flex-direction: column; }
+    .links-grid { grid-template-columns: 1fr 1fr; }
+    .cert-grid { grid-template-columns: 1fr 1fr; }
+    .carousel-slide { width: 300px; }
   }
 </style>
 </head>
@@ -216,17 +286,21 @@
       <span class="mono" style="font-size:12px; color:var(--ink-dim);">/ Augusto</span>
     </a>
     <nav class="nav-links">
-      <a href="#trabalhos" style="font-size:14px; color:var(--ink-dim);">Trabalhos</a>
-      <a href="#processo" style="font-size:14px; color:var(--ink-dim);">Processo</a>
-      <a href="#skills" style="font-size:14px; color:var(--ink-dim);">Skills</a>
-      <a href="#contato" style="font-size:14px; color:var(--ink-dim);">Contato</a>
+      <a href="#trabalhos" style="font-size:14px; color:var(--ink-dim);" data-pt="Trabalhos" data-en="Work">Trabalhos</a>
+      <a href="#ai-building" style="font-size:14px; color:var(--ink-dim);" data-pt="AI Building" data-en="AI Building">AI Building</a>
+      <a href="#processo" style="font-size:14px; color:var(--ink-dim);" data-pt="Processo" data-en="Process">Processo</a>
+      <a href="#skills" style="font-size:14px; color:var(--ink-dim);" data-pt="Skills" data-en="Skills">Skills</a>
+      <a href="#contato" style="font-size:14px; color:var(--ink-dim);" data-pt="Contato" data-en="Contact">Contato</a>
     </nav>
-    <div style="display:flex; align-items:center; gap:16px;">
-      <button class="theme-toggle" id="theme-toggle" aria-label="Alternar tema claro/escuro">
+    <div style="display:flex; align-items:center; gap:12px;">
+      <button class="icon-btn lang-btn" id="lang-toggle" aria-label="Switch language / Trocar idioma">
+        <span id="lang-label">EN</span>
+      </button>
+      <button class="icon-btn" id="theme-toggle" aria-label="Alternar tema claro/escuro">
         <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
         <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
       </button>
-      <a href="mailto:augusto.alves.brasil@gmail.com?subject=Solicita%C3%A7%C3%A3o%20de%20CV" class="btn btn-ghost" style="padding:11px 20px; font-size:14px;">Solicitar CV</a>
+      <a href="mailto:augusto.alves.brasil@gmail.com?subject=Solicita%C3%A7%C3%A3o%20de%20CV" class="btn btn-ghost" style="padding:11px 20px; font-size:14px;" data-pt="Solicitar CV" data-en="Request CV">Solicitar CV</a>
     </div>
   </div>
 
@@ -234,32 +308,39 @@
   <div class="wrap hero-row" style="padding-top: 100px; padding-bottom: 90px; position:relative; overflow:hidden;">
     <div class="glow-pulse" style="position:absolute; top:-200px; left:-140px; width:600px; height:600px; border-radius:50%; background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%); pointer-events:none; z-index:0;"></div>
     <div class="hero-seq-left" style="flex:1.3; display:flex; flex-direction:column; gap:26px; position:relative; z-index:1; min-width:0;">
-      <div class="eyebrow">Augusto Alves Brasil</div>
-      <h1 class="hero-title" style="max-width:680px;">
-        Product Designer &amp; UX Engineer, com raízes profundas em tecnologia.
+      <div class="eyebrow" data-pt="Augusto Alves Brasil" data-en="Augusto Alves Brasil">Augusto Alves Brasil</div>
+      <h1 class="hero-title" style="max-width:700px;"
+        data-pt="Product Designer &amp; UX Engineer. Construo produtos com IA — de ponta a ponta."
+        data-en="Product Designer &amp; UX Engineer. I build products with AI — end to end.">
+        Product Designer &amp; UX Engineer. Construo produtos com IA — de ponta a ponta.
       </h1>
-      <p style="font-size:18px; max-width:560px;">
-        Desenho e construo produtos digitais de ponta a ponta — de pesquisa e arquitetura de informação a design systems e handoff técnico — com uma vantagem incomum: entendo a infraestrutura por trás do que desenho.
+      <p style="font-size:18px; max-width:580px;"
+        data-pt="Product Design, UX Engineering e Gestão de TI, aplicados junto com AI Building e Vibe Coding para tirar produtos do zero e colocá-los em produção sozinho — pesquisa, arquitetura, design system, código e IA, na mesma pessoa."
+        data-en="Product Design, UX Engineering and IT Management, combined with AI Building and Vibe Coding to take products from zero to production solo — research, architecture, design systems, code and AI, all in one person.">
+        Product Design, UX Engineering e Gestão de TI, aplicados junto com AI Building e Vibe Coding para tirar produtos do zero e colocá-los em produção sozinho — pesquisa, arquitetura, design system, código e IA, na mesma pessoa.
       </p>
       <div style="display:flex; gap:16px; margin-top:6px; flex-wrap:wrap;">
-        <a href="#trabalhos" class="btn btn-primary">Ver trabalhos</a>
-        <a href="mailto:augusto.alves.brasil@gmail.com" class="btn btn-ghost">augusto.alves.brasil@gmail.com</a>
+        <a href="#trabalhos" class="btn btn-primary" data-pt="Ver trabalhos" data-en="See work">Ver trabalhos</a>
+        <a href="#ai-building" class="btn btn-ghost" data-pt="AI Building &amp; Vibe Coding" data-en="AI Building &amp; Vibe Coding">AI Building &amp; Vibe Coding</a>
       </div>
     </div>
     <div class="card hero-card" style="flex:1; padding:32px; display:flex; flex-direction:column; gap:22px; position:relative; z-index:1; min-width:280px;">
-      <div class="eyebrow">Perfil rápido</div>
+      <div class="eyebrow" data-pt="Perfil rápido" data-en="Quick profile">Perfil rápido</div>
       <div style="display:flex; flex-direction:column; gap:14px;">
-        <div style="display:flex; justify-content:space-between; font-size:14px;">
-          <span style="color:var(--ink-dim);">Base</span><span>Brasília, DF</span>
+        <div style="display:flex; justify-content:space-between; font-size:14px; gap:12px;">
+          <span style="color:var(--ink-dim);" data-pt="Base" data-en="Based in">Base</span><span>Brasília, DF</span>
         </div>
-        <div style="display:flex; justify-content:space-between; font-size:14px;">
-          <span style="color:var(--ink-dim);">Formação</span><span>Gestão de TI · Pós em Gestão Estratégica de TI</span>
+        <div style="display:flex; justify-content:space-between; font-size:14px; gap:12px;">
+          <span style="color:var(--ink-dim);" data-pt="Formação" data-en="Background">Formação</span>
+          <span data-pt="Gestão de TI · Pós em Gestão Estratégica de TI" data-en="IT Management · Postgrad in Strategic IT Management">Gestão de TI · Pós em Gestão Estratégica de TI</span>
         </div>
-        <div style="display:flex; justify-content:space-between; font-size:14px;">
-          <span style="color:var(--ink-dim);">Foco atual</span><span>Product Design · UX Engineering</span>
+        <div style="display:flex; justify-content:space-between; font-size:14px; gap:12px;">
+          <span style="color:var(--ink-dim);" data-pt="Foco atual" data-en="Current focus">Foco atual</span>
+          <span data-pt="Product Design · UX Engineering · AI Building" data-en="Product Design · UX Engineering · AI Building">Product Design · UX Engineering · AI Building</span>
         </div>
-        <div style="display:flex; justify-content:space-between; font-size:14px;">
-          <span style="color:var(--ink-dim);">Diferencial</span><span>Gestão de TI &amp; Dados</span>
+        <div style="display:flex; justify-content:space-between; font-size:14px; gap:12px;">
+          <span style="color:var(--ink-dim);" data-pt="Diferencial" data-en="Edge">Diferencial</span>
+          <span data-pt="Gestão de TI &amp; Vibe Coding" data-en="IT Management &amp; Vibe Coding">Gestão de TI &amp; Vibe Coding</span>
         </div>
       </div>
       <div style="height:1px; background:var(--line);"></div>
@@ -268,9 +349,13 @@
           <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14zM8.34 18.34V9.75H5.67v8.59h2.67zM7 8.63a1.55 1.55 0 100-3.1 1.55 1.55 0 000 3.1zM18.34 18.34h-.01v-4.83c0-2.9-3.36-2.68-3.9-.31v-2.45H11.7v7.59h2.73v-3.94c0-2.14 2.79-2.31 2.79 0v3.94h2.72z"/></svg>
           linkedin.com/in/augustoalvesbrasil
         </a>
-        <a href="https://instagram.com/ahaugusto" target="_blank" rel="noopener" style="font-size:14px; display:flex; align-items:center; gap:8px;" aria-label="Instagram de Augusto, @ahaugusto">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg>
-          @ahaugusto
+        <a href="https://www.behance.net/augustobrasil" target="_blank" rel="noopener" style="font-size:14px; display:flex; align-items:center; gap:8px;" aria-label="Behance de Augusto Alves Brasil">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M22 7h-7V5h7v2zM3 4h6.9c3.9 0 4.7 2 4.7 3.9 0 1.4-.6 2.4-1.8 3 1.6.5 2.4 1.8 2.4 3.5 0 2.8-1.9 4.4-5.2 4.4H3V4zm3.1 6.2h3.2c1.4 0 2.2-.6 2.2-1.8 0-1.2-.8-1.7-2.3-1.7H6.1v3.5zm0 6h3.5c1.6 0 2.5-.7 2.5-2s-.9-1.9-2.5-1.9H6.1v3.9zM24 14.5h-6.9c.1 1.9 1.1 2.7 2.8 2.7 1.2 0 2.2-.7 2.4-1.4h2.4c-.8 2.3-2.4 3.4-4.9 3.4-3.3 0-5.4-2.1-5.4-5.6 0-3.4 2.2-5.7 5.4-5.7 3.6 0 5.3 2.7 5.2 6.6zm-6.8-1.7h4.4c-.1-1.6-1-2.4-2.2-2.4-1.3 0-2.1.9-2.2 2.4z"/></svg>
+          behance.net/augustobrasil
+        </a>
+        <a href="https://medium.com/@augustoalvesbrasil" target="_blank" rel="noopener" style="font-size:14px; display:flex; align-items:center; gap:8px;" aria-label="Medium de Augusto Alves Brasil">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zM20.96 12c0 3.54-1.51 6.42-3.38 6.42-1.87 0-3.39-2.88-3.39-6.42s1.52-6.42 3.39-6.42 3.38 2.88 3.38 6.42M24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/></svg>
+          medium.com/@augustoalvesbrasil
         </a>
       </div>
     </div>
@@ -279,130 +364,308 @@
   <!-- TRABALHOS -->
   <div id="trabalhos" class="wrap" style="padding-top: 40px; padding-bottom: 120px; border-top:1px solid var(--line);">
     <div class="reveal" data-reveal style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:12px;">
-      <h2 style="font-size:32px;">Trabalhos selecionados</h2>
-      <span class="mono" style="font-size:13px; color:var(--ink-dim);">01 — Cases</span>
+      <h2 style="font-size:32px;" data-pt="Trabalhos selecionados" data-en="Selected work">Trabalhos selecionados</h2>
+      <span class="mono" style="font-size:13px; color:var(--ink-dim);" data-pt="01 — Cases" data-en="01 — Cases">01 — Cases</span>
     </div>
-    <p class="reveal" data-reveal style="font-size:15px; margin-bottom:48px; max-width:640px;">Uma seleção de projetos que atravessam produtos institucionais complexos, plataformas educacionais e ferramentas próprias.</p>
+    <p class="reveal" data-reveal style="font-size:15px; margin-bottom:48px; max-width:680px;"
+      data-pt="Produtos institucionais complexos, ferramentas próprias construídas com IA, e um plugin nascido da própria dor de handoff entre design e dados."
+      data-en="Complex institutional products, AI-built tools of my own, and a plugin born from the actual pain of handoff between design and data.">
+      Produtos institucionais complexos, ferramentas próprias construídas com IA, e um plugin nascido da própria dor de handoff entre design e dados.
+    </p>
 
     <div class="reveal-stagger" data-reveal style="display:flex; flex-direction:column; gap:1px; background:var(--line); border-radius:8px; overflow:hidden;">
 
       <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
         <div>
-          <div class="eyebrow" style="margin-bottom:8px;">Governança pública</div>
+          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Ferramenta própria · AI Building" data-en="Own tool · AI Building">Ferramenta própria · AI Building</div>
+          <h3 style="font-size:21px;">Tusab</h3>
+        </div>
+        <p style="font-size:14.5px;"
+          data-pt="Sistema de gestão de conhecimento pessoal com IA local: indexa YouTube, PDFs, áudio e documentos, e permite conversar com esse conteúdo citando a fonte exata — sem alucinação. Nasceu da minha própria frustração como aluno de um curso que publicava mais vídeos do que eu conseguia acompanhar. Construído com Claude Code, FastAPI, RAG local (BM25 + reranking) e um sistema de 24 agentes especializados que documentam cada decisão de arquitetura."
+          data-en="Personal knowledge management system with local AI: indexes YouTube, PDFs, audio and documents, and lets you chat with that content citing the exact source — no hallucination. Born from my own frustration as a student in a course that published more videos than I could keep up with. Built with Claude Code, FastAPI, local RAG (BM25 + reranking), and a system of 24 specialized agents that document every architecture decision.">
+          Sistema de gestão de conhecimento pessoal com IA local: indexa YouTube, PDFs, áudio e documentos, e permite conversar com esse conteúdo citando a fonte exata — sem alucinação. Nasceu da minha própria frustração como aluno de um curso que publicava mais vídeos do que eu conseguia acompanhar. Construído com Claude Code, FastAPI, RAG local (BM25 + reranking) e um sistema de 24 agentes especializados que documentam cada decisão de arquitetura.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
+          <span class="tag">Electron</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag" data-pt="RAG local" data-en="Local RAG">RAG local</span>
+          <a href="https://github.com/ahaugusto/tusab" target="_blank" rel="noopener" style="font-size:12px;">GitHub ↗</a>
+        </div>
+      </div>
+
+      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Ferramenta própria · Iniciativa pessoal" data-en="Own tool · Personal initiative">Ferramenta própria · Iniciativa pessoal</div>
+          <h3 style="font-size:21px;">BI Bridge</h3>
+        </div>
+        <p style="font-size:14.5px;"
+          data-pt="O handoff de dashboards do Figma para BI costuma ser manual e impreciso — analistas perdem horas replicando cores e tipografia, enquanto specs de negócio (DAX/SQL) se perdem em alinhamentos informais. Criei o BI Bridge para eliminar esse 'telefone sem fio': um plugin Figma que extrai design tokens, gera guias pixel-perfect e empacota a árvore semântica do layout em formato MCP, pronto para alimentar Claude, ChatGPT ou Cursor e gerar componentes de dados automaticamente. Nasceu depois do projeto de dashboards que fiz para o Ministério da Saúde — não é vinculado a nenhum cliente, é meu, sob a CriAugu."
+          data-en="Handing off Figma dashboards to BI tools is usually manual and imprecise — analysts lose hours replicating colors and typography while critical business specs (DAX/SQL) get lost in informal back-and-forth. I built BI Bridge to kill that game of telephone: a Figma plugin that extracts design tokens, generates pixel-perfect guides, and packages the layout's semantic tree in MCP format, ready to feed Claude, ChatGPT or Cursor to auto-generate data components. It came out of a dashboard project I did for Brazil's Ministry of Health — it isn't tied to any client, it's mine, under CriAugu.">
+          O handoff de dashboards do Figma para BI costuma ser manual e impreciso — analistas perdem horas replicando cores e tipografia, enquanto specs de negócio (DAX/SQL) se perdem em alinhamentos informais. Criei o BI Bridge para eliminar esse "telefone sem fio": um plugin Figma que extrai design tokens, gera guias pixel-perfect e empacota a árvore semântica do layout em formato MCP, pronto para alimentar Claude, ChatGPT ou Cursor e gerar componentes de dados automaticamente. Nasceu depois do projeto de dashboards que fiz para o Ministério da Saúde — não é vinculado a nenhum cliente, é meu, sob a CriAugu.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
+          <span class="tag">Figma API</span>
+          <span class="tag">MCP</span>
+          <span class="tag" data-pt="Autoria própria" data-en="Own authorship">Autoria própria</span>
+          <a href="https://www.figma.com/community/plugin/1607744231649281413/bi-bridge-design-to-data" target="_blank" rel="noopener" style="font-size:12px;" data-pt="Ver no Figma ↗" data-en="View on Figma ↗">Ver no Figma ↗</a>
+        </div>
+      </div>
+
+      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Fóton · Caixa Econômica Federal" data-en="Fóton · Caixa Econômica Federal">Fóton · Caixa Econômica Federal</div>
+          <h3 style="font-size:21px;">Handex — Handoff Express</h3>
+        </div>
+        <p style="font-size:14.5px;"
+          data-pt="Plugin Figma para o Design System Corporativo da Caixa que automatiza o handoff de design para desenvolvimento: escaneia tokens de UI e os compara automaticamente contra as bibliotecas oficiais do design system, anota specs e medidas direto no canvas, mapeia fluxos de tela e gera uma ficha técnica completa com declaração de conformidade — publicado na Figma Community e em uso ativo pelo time."
+          data-en="Figma plugin for Caixa's Corporate Design System that automates design-to-dev handoff: scans UI tokens and auto-compares them against the official design system libraries, annotates specs and measurements directly on the canvas, maps screen flows, and generates a full technical spec sheet with a compliance statement — published on Figma Community and in active use by the team.">
+          Plugin Figma para o Design System Corporativo da Caixa que automatiza o handoff de design para desenvolvimento: escaneia tokens de UI e os compara automaticamente contra as bibliotecas oficiais do design system, anota specs e medidas direto no canvas, mapeia fluxos de tela e gera uma ficha técnica completa com declaração de conformidade — publicado na Figma Community e em uso ativo pelo time.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
+          <span class="tag">Figma API</span>
+          <span class="tag" data-pt="Design System" data-en="Design System">Design System</span>
+          <span class="tag" data-pt="Em produção" data-en="In production">Em produção</span>
+        </div>
+      </div>
+
+      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Fóton · Caixa Econômica Federal" data-en="Fóton · Caixa Econômica Federal">Fóton · Caixa Econômica Federal</div>
+          <h3 style="font-size:21px;">Prisma</h3>
+        </div>
+        <p style="font-size:14.5px;"
+          data-pt="Plugin Figma para auditar a maturidade do processo de UX por trás de um produto — não só o protótipo, mas as evidências de descoberta, definição, ideação e validação, além de aderência a design system e acessibilidade. Em desenvolvimento ativo, com múltiplos agentes de IA orquestrados avaliando cada dimensão."
+          data-en="Figma plugin that audits the maturity of the UX process behind a product — not just the prototype, but the evidence of discovery, definition, ideation and validation, plus design system and accessibility adherence. Actively in development, with multiple orchestrated AI agents assessing each dimension.">
+          Plugin Figma para auditar a maturidade do processo de UX por trás de um produto — não só o protótipo, mas as evidências de descoberta, definição, ideação e validação, além de aderência a design system e acessibilidade. Em desenvolvimento ativo, com múltiplos agentes de IA orquestrados avaliando cada dimensão.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
+          <span class="tag" data-pt="UX Ops" data-en="UX Ops">UX Ops</span>
+          <span class="tag" data-pt="Em desenvolvimento" data-en="In development">Em desenvolvimento</span>
+        </div>
+      </div>
+
+      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Fóton · Caixa Econômica Federal" data-en="Fóton · Caixa Econômica Federal">Fóton · Caixa Econômica Federal</div>
+          <h3 style="font-size:21px;">ResponsivUX</h3>
+        </div>
+        <p style="font-size:14.5px;"
+          data-pt="Plugin Figma que gera layouts responsivos automaticamente em múltiplos breakpoints (768px a 3840px), com Auto Layout responsivo e constraints inteligentes aplicadas a partir de um único frame selecionado — integrado à identidade visual do Design System da Caixa."
+          data-en="Figma plugin that auto-generates responsive layouts across multiple breakpoints (768px to 3840px), with responsive Auto Layout and smart constraints applied from a single selected frame — integrated with Caixa's Design System visual identity.">
+          Plugin Figma que gera layouts responsivos automaticamente em múltiplos breakpoints (768px a 3840px), com Auto Layout responsivo e constraints inteligentes aplicadas a partir de um único frame selecionado — integrado à identidade visual do Design System da Caixa.
+        </p>
+        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
+          <span class="tag">Figma API</span>
+          <span class="tag" data-pt="Layout responsivo" data-en="Responsive layout">Layout responsivo</span>
+        </div>
+      </div>
+
+      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
+        <div>
+          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Governança pública" data-en="Public governance">Governança pública</div>
           <h3 style="font-size:21px;">Plataforma Brasil</h3>
         </div>
-        <p style="font-size:14.5px;">Sistema nacional de governança regulatória de pesquisa em saúde. Liderei a virada de uma interface de navegabilidade complexa para um redesign orientado a jornada — discovery, arquitetura de informação, prototipação e testes de usabilidade, em conformidade com Gov.BR Design System (eMAG/WCAG).</p>
+        <p style="font-size:14.5px;"
+          data-pt="Sistema nacional de governança regulatória de pesquisa em saúde. Liderei a virada de uma interface de navegabilidade complexa para um redesign orientado a jornada — discovery, arquitetura de informação, prototipação e testes de usabilidade, em conformidade com Gov.BR Design System (eMAG/WCAG)."
+          data-en="National system for research governance in health. I led the shift from a hard-to-navigate interface to a journey-driven redesign — discovery, information architecture, prototyping and usability testing, compliant with the Gov.BR Design System (eMAG/WCAG).">
+          Sistema nacional de governança regulatória de pesquisa em saúde. Liderei a virada de uma interface de navegabilidade complexa para um redesign orientado a jornada — discovery, arquitetura de informação, prototipação e testes de usabilidade, em conformidade com Gov.BR Design System (eMAG/WCAG).
+        </p>
         <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">UX Research</span>
-          <span class="tag">Design System</span>
-          <span class="tag">Acessibilidade</span>
+          <span class="tag" data-pt="UX Research" data-en="UX Research">UX Research</span>
+          <span class="tag" data-pt="Design System" data-en="Design System">Design System</span>
+          <span class="tag" data-pt="Acessibilidade" data-en="Accessibility">Acessibilidade</span>
         </div>
       </div>
 
       <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
         <div>
-          <div class="eyebrow" style="margin-bottom:8px;">Design system em BI</div>
-          <h3 style="font-size:21px;">Guia de Estilo para Dashboards</h3>
+          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Design system em BI" data-en="BI design system">Design system em BI</div>
+          <h3 style="font-size:21px;" data-pt="Guia de Estilo para Dashboards" data-en="Dashboard Style Guide">Guia de Estilo para Dashboards</h3>
         </div>
-        <p style="font-size:14.5px;">Design system construído integralmente dentro do Power BI: grid de 12 colunas, componentes plug-and-play, mockups contextuais com tooltips e padrões de acessibilidade — acelerando o setup de novos painéis e garantindo consistência visual entre times.</p>
+        <p style="font-size:14.5px;"
+          data-pt="Design system construído integralmente dentro do Power BI — não um manual estático, mas um sistema vivo: grid de 12 colunas navegável no próprio painel de camadas, componentes plug-and-play, tooltips com orientação de montagem e padrões de acessibilidade obrigatórios. Esse projeto foi a origem direta do BI Bridge."
+          data-en="Design system built entirely inside Power BI — not a static manual, but a living system: a 12-column grid navigable in the layer panel itself, plug-and-play components, assembly-guidance tooltips, and mandatory accessibility standards. This project was the direct origin of BI Bridge.">
+          Design system construído integralmente dentro do Power BI — não um manual estático, mas um sistema vivo: grid de 12 colunas navegável no próprio painel de camadas, componentes plug-and-play, tooltips com orientação de montagem e padrões de acessibilidade obrigatórios. Esse projeto foi a origem direta do BI Bridge.
+        </p>
         <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
           <span class="tag">Power BI</span>
-          <span class="tag">Design System</span>
-          <span class="tag">Dataviz</span>
+          <span class="tag" data-pt="Design System" data-en="Design System">Design System</span>
+          <span class="tag" data-pt="Dataviz" data-en="Dataviz">Dataviz</span>
         </div>
       </div>
 
       <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
         <div>
-          <div class="eyebrow" style="margin-bottom:8px;">Canais físicos</div>
+          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Canais físicos" data-en="Physical channels">Canais físicos</div>
           <h3 style="font-size:21px;">Caixa Econômica Federal</h3>
         </div>
-        <p style="font-size:14.5px;">Redesign integral do menu lateral e de uma tela única de crédito para pessoa física, dentro do Design System da Caixa. Discovery, wireframes multi-fidelidade, prototipação, testes de usabilidade e handoff completo para engenharia.</p>
+        <p style="font-size:14.5px;"
+          data-pt="Redesign integral do menu lateral e de uma tela única de crédito para pessoa física, dentro do Design System da Caixa. Discovery, wireframes multi-fidelidade, prototipação, testes de usabilidade e handoff completo para engenharia."
+          data-en="Full redesign of the side menu and a single unified credit screen for individual customers, within Caixa's Design System. Discovery, multi-fidelity wireframes, prototyping, usability testing and full handoff to engineering.">
+          Redesign integral do menu lateral e de uma tela única de crédito para pessoa física, dentro do Design System da Caixa. Discovery, wireframes multi-fidelidade, prototipação, testes de usabilidade e handoff completo para engenharia.
+        </p>
         <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">Prototipação</span>
+          <span class="tag" data-pt="Prototipação" data-en="Prototyping">Prototipação</span>
           <span class="tag">Handoff</span>
         </div>
       </div>
 
       <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
         <div>
-          <div class="eyebrow" style="margin-bottom:8px;">EdTech corporativa</div>
+          <div class="eyebrow" style="margin-bottom:8px;" data-pt="EdTech corporativa" data-en="Corporate EdTech">EdTech corporativa</div>
           <h3 style="font-size:21px;">Digibee Academy</h3>
         </div>
-        <p style="font-size:14.5px;">Como líder técnico, conduzi a gestão completa de um LMS (WordPress + LearnDash): redesign de jornada, design instrucional, landing pages e análise de métricas de UX — a plataforma tornou-se um subproduto diferencial da empresa.</p>
+        <p style="font-size:14.5px;"
+          data-pt="Como líder técnico, conduzi a gestão completa de um LMS (WordPress + LearnDash): redesign de jornada, design instrucional, landing pages e análise de métricas de UX — a plataforma tornou-se um subproduto diferencial da empresa."
+          data-en="As tech lead, I ran the full management of an LMS (WordPress + LearnDash): journey redesign, instructional design, landing pages and UX metrics analysis — the platform became a key differentiator product for the company.">
+          Como líder técnico, conduzi a gestão completa de um LMS (WordPress + LearnDash): redesign de jornada, design instrucional, landing pages e análise de métricas de UX — a plataforma tornou-se um subproduto diferencial da empresa.
+        </p>
         <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">Tech Lead</span>
+          <span class="tag" data-pt="Tech Lead" data-en="Tech Lead">Tech Lead</span>
           <span class="tag">LMS</span>
-          <span class="tag">UX Writing</span>
-        </div>
-      </div>
-
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;">Ferramenta própria</div>
-          <h3 style="font-size:21px;">BI Bridge</h3>
-        </div>
-        <p style="font-size:14.5px;">Plugin Figma que criei para eliminar o retrabalho entre design e engenharia de dados: extração automática de design tokens, geração de guia pixel-perfect e mapeamento de specs (DAX/SQL) direto do arquivo de design.</p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">Autoria própria</span>
-          <span class="tag">Figma API</span>
-        </div>
-      </div>
-
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;">Design Systems corporativos</div>
-          <h3 style="font-size:21px;">Ferramentas de UX para Design System</h3>
-        </div>
-        <p style="font-size:14.5px;">Desenvolvimento de plugins e ferramentas internas de apoio a um Design System corporativo — handoff de design, auditoria de maturidade UX e geração de layouts responsivos — usados por times de produto em escala.</p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">Cliente confidencial</span>
-          <span class="tag">Design Ops</span>
-        </div>
-      </div>
-
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;">Design especulativo</div>
-          <h3 style="font-size:21px;">Mercado Mútuo</h3>
-        </div>
-        <p style="font-size:14.5px;">Estudo autoral de arquitetura de produto e estratégia de ecossistema: uma proposta conceitual de vertical C2C de aluguel de itens para um grande marketplace brasileiro, com pesquisa de validação, whitepaper e arquitetura de software detalhada.</p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">Projeto conceitual</span>
-          <span class="tag">Sem vínculo comercial</span>
+          <span class="tag" data-pt="UX Writing" data-en="UX Writing">UX Writing</span>
         </div>
       </div>
 
     </div>
   </div>
 
+  <!-- AI BUILDING -->
+  <div id="ai-building" class="wrap" style="padding-bottom: 120px;">
+    <div class="reveal ai-row card" data-reveal style="padding: 56px;">
+      <div style="flex:1.2; display:flex; flex-direction:column; gap:18px;">
+        <div class="eyebrow" data-pt="AI Building &amp; Vibe Coding" data-en="AI Building &amp; Vibe Coding">AI Building &amp; Vibe Coding</div>
+        <h2 style="font-size:30px; line-height:1.3;"
+          data-pt="Não uso IA para acelerar tarefas pontuais. Construo produtos inteiros com ela."
+          data-en="I don't use AI to speed up isolated tasks. I build entire products with it.">
+          Não uso IA para acelerar tarefas pontuais. Construo produtos inteiros com ela.
+        </h2>
+        <p style="font-size:15px;"
+          data-pt="No Tusab, no BI Bridge, no Handex e no Prisma, o processo é o mesmo: trabalho com Claude Code orquestrando agentes especializados por domínio (backend, frontend, design, QA, arquitetura), cada um com contexto próprio e memória entre sessões. As decisões de arquitetura, os experimentos descartados e as regras de negócio ficam documentados junto com o código — não é 'vibe coding' solto, é um processo de engenharia com IA como parceira de verdade, do discovery ao deploy."
+          data-en="In Tusab, BI Bridge, Handex and Prisma, the process is the same: I work with Claude Code orchestrating domain-specialized agents (backend, frontend, design, QA, architecture), each with its own context and memory across sessions. Architecture decisions, discarded experiments and business rules are documented alongside the code — it isn't loose 'vibe coding', it's an engineering process with AI as a real partner, from discovery to deploy.">
+          No Tusab, no BI Bridge, no Handex e no Prisma, o processo é o mesmo: trabalho com Claude Code orquestrando agentes especializados por domínio (backend, frontend, design, QA, arquitetura), cada um com contexto próprio e memória entre sessões. As decisões de arquitetura, os experimentos descartados e as regras de negócio ficam documentados junto com o código — não é "vibe coding" solto, é um processo de engenharia com IA como parceira de verdade, do discovery ao deploy.
+        </p>
+        <div style="display:flex; gap:8px; flex-wrap:wrap; margin-top:8px;">
+          <span class="tag">Claude Code</span>
+          <span class="tag" data-pt="Agentes especializados" data-en="Specialized agents">Agentes especializados</span>
+          <span class="tag" data-pt="Spec-driven development" data-en="Spec-driven development">Spec-driven development</span>
+          <span class="tag">MCP</span>
+        </div>
+      </div>
+      <div style="width:1px; align-self:stretch; background:var(--line);"></div>
+      <div style="flex:1; display:flex; flex-direction:column; gap:16px;">
+        <div class="eyebrow" data-pt="Em números (Tusab)" data-en="In numbers (Tusab)">Em números (Tusab)</div>
+        <div style="display:flex; flex-direction:column; gap:14px;">
+          <div style="display:flex; justify-content:space-between; align-items:baseline;">
+            <span style="font-size:28px; font-family:'Quicksand',sans-serif; font-weight:600;">24</span>
+            <span style="font-size:13px; color:var(--ink-dim); text-align:right; max-width:190px;" data-pt="agentes especializados via slash commands" data-en="specialized agents via slash commands">agentes especializados via slash commands</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:baseline;">
+            <span style="font-size:28px; font-family:'Quicksand',sans-serif; font-weight:600;">910+</span>
+            <span style="font-size:13px; color:var(--ink-dim); text-align:right; max-width:190px;" data-pt="commits com Claude Code como par de programação" data-en="commits with Claude Code as pair programmer">commits com Claude Code como par de programação</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:baseline;">
+            <span style="font-size:28px; font-family:'Quicksand',sans-serif; font-weight:600;">229</span>
+            <span style="font-size:13px; color:var(--ink-dim); text-align:right; max-width:190px;" data-pt="testes automatizados como gate de qualidade" data-en="automated tests as a quality gate">testes automatizados como gate de qualidade</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <!-- PROCESSO -->
   <div id="processo" class="wrap" style="padding-bottom: 120px;">
-    <div class="reveal" data-reveal style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:48px; flex-wrap:wrap; gap:12px;">
-      <h2 style="font-size:32px;">Como eu trabalho</h2>
-      <span class="mono" style="font-size:13px; color:var(--ink-dim);">02 — Processo</span>
+    <div class="reveal" data-reveal style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:12px;">
+      <h2 style="font-size:32px;" data-pt="Como eu trabalho" data-en="How I work">Como eu trabalho</h2>
+      <span class="mono" style="font-size:13px; color:var(--ink-dim);" data-pt="02 — Processo" data-en="02 — Process">02 — Processo</span>
     </div>
-    <div class="reveal-stagger process-grid" data-reveal>
-      <div style="display:flex; flex-direction:column; gap:14px;">
+    <p class="reveal" data-reveal style="font-size:15px; margin-bottom:36px; max-width:680px;"
+      data-pt="Um processo só, aplicado com as mesmas ferramentas em produtos institucionais e nas minhas próprias — da pesquisa ao código, sem entregar a etapa de construção para outra pessoa."
+      data-en="One single process, applied with the same tools across institutional products and my own — from research to code, without handing off the build stage to someone else.">
+      Um processo só, aplicado com as mesmas ferramentas em produtos institucionais e nas minhas próprias — da pesquisa ao código, sem entregar a etapa de construção para outra pessoa.
+    </p>
+
+    <div class="carousel-nav">
+      <button class="carousel-arrow" id="carousel-prev" aria-label="Anterior">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="carousel-arrow" id="carousel-next" aria-label="Próximo">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+    </div>
+
+    <div class="carousel-track reveal" data-reveal id="carousel-track">
+
+      <div class="carousel-slide card" style="padding:28px; display:flex; flex-direction:column; gap:16px;">
         <span class="mono" style="font-size:13px; color:var(--accent);">01</span>
-        <h3 style="font-size:17px;">Discovery</h3>
-        <p style="font-size:14px;">Pesquisa com usuários, entrevistas e desk research antes de qualquer decisão de tela.</p>
+        <h3 style="font-size:19px;" data-pt="Discovery" data-en="Discovery">Discovery</h3>
+        <p style="font-size:14px;"
+          data-pt="Pesquisa com usuários, entrevistas e desk research antes de qualquer decisão de tela — no Tusab, isso começou com minha própria frustração como usuário de um curso; na Caixa e no DECIT, com entrevistas e desk research formais."
+          data-en="User research, interviews and desk research before any screen decision — in Tusab, it started with my own frustration as a course student; at Caixa and DECIT, with formal interviews and desk research.">
+          Pesquisa com usuários, entrevistas e desk research antes de qualquer decisão de tela — no Tusab, isso começou com minha própria frustração como usuário de um curso; na Caixa e no DECIT, com entrevistas e desk research formais.
+        </p>
+        <div class="shot-placeholder">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span data-pt="Print em breve" data-en="Screenshot coming soon">Print em breve</span>
+        </div>
       </div>
-      <div style="display:flex; flex-direction:column; gap:14px;">
+
+      <div class="carousel-slide card" style="padding:28px; display:flex; flex-direction:column; gap:16px;">
         <span class="mono" style="font-size:13px; color:var(--accent);">02</span>
-        <h3 style="font-size:17px;">Arquitetura</h3>
-        <p style="font-size:14px;">Jornadas, personas e wireframes — da baixa à alta fidelidade.</p>
+        <h3 style="font-size:19px;" data-pt="Arquitetura" data-en="Architecture">Arquitetura</h3>
+        <p style="font-size:14px;"
+          data-pt="Jornadas, personas e wireframes — da baixa à alta fidelidade. Em produtos próprios, isso inclui também a arquitetura técnica: como o RAG do Tusab busca fontes, como o BI Bridge estrutura o schema semântico."
+          data-en="Journeys, personas and wireframes — from low to high fidelity. In my own products, this also includes technical architecture: how Tusab's RAG retrieves sources, how BI Bridge structures its semantic schema.">
+          Jornadas, personas e wireframes — da baixa à alta fidelidade. Em produtos próprios, isso inclui também a arquitetura técnica: como o RAG do Tusab busca fontes, como o BI Bridge estrutura o schema semântico.
+        </p>
+        <div class="shot-placeholder">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span data-pt="Print em breve" data-en="Screenshot coming soon">Print em breve</span>
+        </div>
       </div>
-      <div style="display:flex; flex-direction:column; gap:14px;">
+
+      <div class="carousel-slide card" style="padding:28px; display:flex; flex-direction:column; gap:16px;">
         <span class="mono" style="font-size:13px; color:var(--accent);">03</span>
-        <h3 style="font-size:17px;">Validação</h3>
-        <p style="font-size:14px;">Prototipação interativa, testes A/B e testes de usabilidade com usuários reais.</p>
+        <h3 style="font-size:19px;" data-pt="AI Building" data-en="AI Building">AI Building</h3>
+        <p style="font-size:14px;"
+          data-pt="Construção com Claude Code: agentes especializados por domínio, memória de decisões entre sessões, spec-driven development. É aqui que design vira produto funcional, sem intermediário."
+          data-en="Building with Claude Code: domain-specialized agents, decision memory across sessions, spec-driven development. This is where design becomes a working product, with no middle step.">
+          Construção com Claude Code: agentes especializados por domínio, memória de decisões entre sessões, spec-driven development. É aqui que design vira produto funcional, sem intermediário.
+        </p>
+        <div class="shot-placeholder">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span data-pt="Print em breve" data-en="Screenshot coming soon">Print em breve</span>
+        </div>
       </div>
-      <div style="display:flex; flex-direction:column; gap:14px;">
+
+      <div class="carousel-slide card" style="padding:28px; display:flex; flex-direction:column; gap:16px;">
         <span class="mono" style="font-size:13px; color:var(--accent);">04</span>
-        <h3 style="font-size:17px;">Handoff &amp; métricas</h3>
-        <p style="font-size:14px;">Documentação técnica para dev e acompanhamento pós-lançamento com dados de comportamento.</p>
+        <h3 style="font-size:19px;" data-pt="Validação" data-en="Validation">Validação</h3>
+        <p style="font-size:14px;"
+          data-pt="Prototipação interativa, testes A/B e testes de usabilidade com usuários reais — e, em produtos próprios, testes automatizados (229 no Tusab) como gate antes de qualquer release."
+          data-en="Interactive prototyping, A/B tests and usability testing with real users — and, in my own products, automated tests (229 in Tusab) as a gate before any release.">
+          Prototipação interativa, testes A/B e testes de usabilidade com usuários reais — e, em produtos próprios, testes automatizados (229 no Tusab) como gate antes de qualquer release.
+        </p>
+        <div class="shot-placeholder">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span data-pt="Print em breve" data-en="Screenshot coming soon">Print em breve</span>
+        </div>
       </div>
+
+      <div class="carousel-slide card" style="padding:28px; display:flex; flex-direction:column; gap:16px;">
+        <span class="mono" style="font-size:13px; color:var(--accent);">05</span>
+        <h3 style="font-size:19px;" data-pt="Handoff &amp; métricas" data-en="Handoff &amp; metrics">Handoff &amp; métricas</h3>
+        <p style="font-size:14px;"
+          data-pt="Documentação técnica para dev e acompanhamento pós-lançamento com dados de comportamento — em ferramentas próprias, o handoff é para mim mesmo: documentação como parte do produto, não um anexo."
+          data-en="Technical documentation for dev and post-launch tracking with behavior data — in my own tools, the handoff is to myself: documentation as part of the product, not an afterthought.">
+          Documentação técnica para dev e acompanhamento pós-lançamento com dados de comportamento — em ferramentas próprias, o handoff é para mim mesmo: documentação como parte do produto, não um anexo.
+        </p>
+        <div class="shot-placeholder">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span data-pt="Print em breve" data-en="Screenshot coming soon">Print em breve</span>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -410,47 +673,88 @@
   <div id="skills" class="wrap" style="padding-bottom: 120px;">
     <div class="card reveal skills-grid" data-reveal data-skills style="padding:56px;">
       <div style="display:flex; flex-direction:column; gap:28px;">
-        <div class="eyebrow">Product Design &amp; UX Engineering</div>
+        <div class="eyebrow" data-pt="Product Design &amp; UX Engineering" data-en="Product Design &amp; UX Engineering">Product Design &amp; UX Engineering</div>
         <div style="display:flex; flex-direction:column; gap:18px;">
           <div style="display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; justify-content:space-between; font-size:14px;"><span>UX Research &amp; Discovery</span><span class="mono" style="color:var(--ink-dim);">92%</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:14px;"><span data-pt="UX Research &amp; Discovery" data-en="UX Research &amp; Discovery">UX Research &amp; Discovery</span><span class="mono" style="color:var(--ink-dim);">92%</span></div>
             <div class="skillbar-track"><div class="skillbar-fill" data-skillbar style="--target-width:92%;"></div></div>
           </div>
           <div style="display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Figma &amp; Prototipação</span><span class="mono" style="color:var(--ink-dim);">95%</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:14px;"><span data-pt="Figma &amp; Prototipação" data-en="Figma &amp; Prototyping">Figma &amp; Prototipação</span><span class="mono" style="color:var(--ink-dim);">95%</span></div>
             <div class="skillbar-track"><div class="skillbar-fill" data-skillbar style="--target-width:95%;"></div></div>
           </div>
           <div style="display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Design Systems</span><span class="mono" style="color:var(--ink-dim);">90%</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:14px;"><span data-pt="Design Systems" data-en="Design Systems">Design Systems</span><span class="mono" style="color:var(--ink-dim);">90%</span></div>
             <div class="skillbar-track"><div class="skillbar-fill" data-skillbar style="--target-width:90%;"></div></div>
           </div>
           <div style="display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Acessibilidade (WCAG / eMAG)</span><span class="mono" style="color:var(--ink-dim);">85%</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:14px;"><span data-pt="Acessibilidade (WCAG / eMAG)" data-en="Accessibility (WCAG / eMAG)">Acessibilidade (WCAG / eMAG)</span><span class="mono" style="color:var(--ink-dim);">85%</span></div>
             <div class="skillbar-track"><div class="skillbar-fill" data-skillbar style="--target-width:85%;"></div></div>
           </div>
         </div>
       </div>
       <div style="display:flex; flex-direction:column; gap:28px;">
-        <div class="eyebrow">Gestão de TI &amp; Dados</div>
+        <div class="eyebrow" data-pt="AI Building &amp; Gestão de TI" data-en="AI Building &amp; IT Management">AI Building &amp; Gestão de TI</div>
         <div style="display:flex; flex-direction:column; gap:18px;">
           <div style="display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Arquitetura de sistemas</span><span class="mono" style="color:var(--ink-dim);">80%</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:14px;"><span data-pt="Vibe Coding com Claude Code" data-en="Vibe Coding with Claude Code">Vibe Coding com Claude Code</span><span class="mono" style="color:var(--ink-dim);">90%</span></div>
+            <div class="skillbar-track"><div class="skillbar-fill" data-skillbar style="--target-width:90%;"></div></div>
+          </div>
+          <div style="display:flex; flex-direction:column; gap:8px;">
+            <div style="display:flex; justify-content:space-between; font-size:14px;"><span data-pt="Arquitetura de sistemas" data-en="Systems architecture">Arquitetura de sistemas</span><span class="mono" style="color:var(--ink-dim);">80%</span></div>
             <div class="skillbar-track"><div class="skillbar-fill" data-skillbar style="--target-width:80%;"></div></div>
           </div>
           <div style="display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Power BI &amp; Análise de Dados</span><span class="mono" style="color:var(--ink-dim);">85%</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:14px;"><span data-pt="Power BI &amp; Análise de Dados" data-en="Power BI &amp; Data Analysis">Power BI &amp; Análise de Dados</span><span class="mono" style="color:var(--ink-dim);">85%</span></div>
             <div class="skillbar-track"><div class="skillbar-fill" data-skillbar style="--target-width:85%;"></div></div>
           </div>
           <div style="display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; justify-content:space-between; font-size:14px;"><span>Governança de TI (ITIL / COBIT)</span><span class="mono" style="color:var(--ink-dim);">78%</span></div>
+            <div style="display:flex; justify-content:space-between; font-size:14px;"><span data-pt="Governança de TI (ITIL / COBIT)" data-en="IT Governance (ITIL / COBIT)">Governança de TI (ITIL / COBIT)</span><span class="mono" style="color:var(--ink-dim);">78%</span></div>
             <div class="skillbar-track"><div class="skillbar-fill" data-skillbar style="--target-width:78%;"></div></div>
-          </div>
-          <div style="display:flex; flex-direction:column; gap:8px;">
-            <div style="display:flex; justify-content:space-between; font-size:14px;"><span>IA aplicada a produto</span><span class="mono" style="color:var(--ink-dim);">88%</span></div>
-            <div class="skillbar-track"><div class="skillbar-fill" data-skillbar style="--target-width:88%;"></div></div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- LINKS / PRESENÇA -->
+  <div class="wrap" style="padding-bottom: 120px;">
+    <div class="reveal" data-reveal style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:36px; flex-wrap:wrap; gap:12px;">
+      <h2 style="font-size:32px;" data-pt="Presença &amp; certificações" data-en="Presence &amp; certifications">Presença &amp; certificações</h2>
+      <span class="mono" style="font-size:13px; color:var(--ink-dim);" data-pt="03 — Links" data-en="03 — Links">03 — Links</span>
+    </div>
+
+    <div class="reveal-stagger links-grid" data-reveal style="margin-bottom:40px;">
+      <a href="https://www.behance.net/augustobrasil" target="_blank" rel="noopener" class="card row-hover" style="padding:24px; display:flex; flex-direction:column; gap:10px;">
+        <span class="eyebrow" data-pt="Design de conteúdo" data-en="Content design">Design de conteúdo</span>
+        <span style="color:var(--ink); font-size:16px; font-family:'Quicksand',sans-serif; font-weight:600;">Behance ↗</span>
+        <span style="font-size:13px; color:var(--ink-dim);" data-pt="Peças visuais, motion e identidade" data-en="Visuals, motion and identity work">Peças visuais, motion e identidade</span>
+      </a>
+      <a href="https://medium.com/@augustoalvesbrasil" target="_blank" rel="noopener" class="card row-hover" style="padding:24px; display:flex; flex-direction:column; gap:10px;">
+        <span class="eyebrow" data-pt="Escrita" data-en="Writing">Escrita</span>
+        <span style="color:var(--ink); font-size:16px; font-family:'Quicksand',sans-serif; font-weight:600;">Medium ↗</span>
+        <span style="font-size:13px; color:var(--ink-dim);" data-pt="Artigos sobre UX e produto" data-en="Articles on UX and product">Artigos sobre UX e produto</span>
+      </a>
+      <a href="https://www.figma.com/@augustobrasil" target="_blank" rel="noopener" class="card row-hover" style="padding:24px; display:flex; flex-direction:column; gap:10px;">
+        <span class="eyebrow" data-pt="Protótipos" data-en="Prototypes">Protótipos</span>
+        <span style="color:var(--ink); font-size:16px; font-family:'Quicksand',sans-serif; font-weight:600;" data-pt="Figma Community ↗" data-en="Figma Community ↗">Figma Community ↗</span>
+        <span style="font-size:13px; color:var(--ink-dim);" data-pt="6 cases públicos, incluindo BI Bridge" data-en="6 public cases, including BI Bridge">6 cases públicos, incluindo BI Bridge</span>
+      </a>
+    </div>
+
+    <div class="reveal" data-reveal style="margin-bottom:20px;">
+      <span class="eyebrow" data-pt="Certificações &amp; cursos" data-en="Certifications &amp; courses">Certificações &amp; cursos</span>
+    </div>
+    <div class="reveal-stagger cert-grid" data-reveal>
+      <span class="tag" style="padding:8px 14px;">ITIL</span>
+      <span class="tag" style="padding:8px 14px;">COBIT Foundation</span>
+      <span class="tag" style="padding:8px 14px;" data-pt="Scrum" data-en="Scrum">Scrum</span>
+      <span class="tag" style="padding:8px 14px;">Power BI</span>
+      <span class="tag" style="padding:8px 14px;" data-pt="Business Intelligence" data-en="Business Intelligence">Business Intelligence</span>
+      <span class="tag" style="padding:8px 14px;" data-pt="Gestão de TI" data-en="IT Management">Gestão de TI</span>
+      <span class="tag" style="padding:8px 14px;" data-pt="Análise de Projetos" data-en="Project Analysis">Análise de Projetos</span>
+      <span class="tag" style="padding:8px 14px;">UX Design &amp; Research — UXNOW</span>
+      <span class="tag" style="padding:8px 14px;">UX — Coderhouse</span>
     </div>
   </div>
 
@@ -458,8 +762,12 @@
   <div id="contato" class="wrap" style="padding-bottom: 100px;">
     <div class="reveal contact-row" data-reveal style="border-radius:10px; padding:64px; background: linear-gradient(135deg, var(--accent-dim), var(--bg-raised)); border:1px solid var(--line);">
       <div style="display:flex; flex-direction:column; gap:12px; max-width:560px;">
-        <h2 style="font-size:30px;">Vamos conversar sobre o seu produto?</h2>
-        <p style="font-size:15px;">Aberto a projetos de product design, UX engineering e consultoria em gestão de TI.</p>
+        <h2 style="font-size:30px;" data-pt="Vamos conversar sobre o seu produto?" data-en="Let's talk about your product?">Vamos conversar sobre o seu produto?</h2>
+        <p style="font-size:15px;"
+          data-pt="Aberto a projetos de product design, UX engineering, AI building e consultoria em gestão de TI."
+          data-en="Open to product design, UX engineering, AI building and IT management consulting projects.">
+          Aberto a projetos de product design, UX engineering, AI building e consultoria em gestão de TI.
+        </p>
       </div>
       <a href="mailto:augusto.alves.brasil@gmail.com" class="btn btn-primary" style="font-size:16px; padding:16px 28px;">augusto.alves.brasil@gmail.com</a>
     </div>
@@ -468,7 +776,7 @@
   <!-- FOOTER -->
   <div class="wrap" style="display:flex; align-items:center; justify-content:space-between; padding-top: 32px; padding-bottom: 32px; border-top:1px solid var(--line); flex-wrap:wrap; gap:16px;">
     <span class="mono" style="font-size:12px; color:var(--ink-dim);">Augusto Alves Brasil</span>
-    <a href="https://criaugu.com" class="mono" style="font-size:12px; color:var(--ink-dim);">← Voltar para CriAugu</a>
+    <a href="https://criaugu.com" class="mono" style="font-size:12px; color:var(--ink-dim);" data-pt="← Voltar para CriAugu" data-en="← Back to CriAugu">← Voltar para CriAugu</a>
   </div>
 
 </div>
@@ -476,40 +784,66 @@
 <script>
 (function () {
   var root = document.documentElement;
-  var STORAGE_KEY = 'criaugu-theme';
+  var THEME_KEY = 'criaugu-theme';
+  var LANG_KEY = 'criaugu-lang';
 
+  // Theme
   function getPreferredTheme() {
-    var saved = localStorage.getItem(STORAGE_KEY);
+    var saved = localStorage.getItem(THEME_KEY);
     if (saved === 'dark' || saved === 'light') return saved;
     return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
   }
-
   function applyTheme(theme) {
     root.setAttribute('data-theme', theme);
     var isLight = theme === 'light';
     var navLogo = document.getElementById('logo-nav');
     if (navLogo) navLogo.src = isLight ? 'logo-wordmark-light.png' : 'logo-wordmark.png';
   }
-
   var theme = getPreferredTheme();
   applyTheme(theme);
-
-  var toggle = document.getElementById('theme-toggle');
-  if (toggle) {
-    toggle.addEventListener('click', function () {
+  var themeToggle = document.getElementById('theme-toggle');
+  if (themeToggle) {
+    themeToggle.addEventListener('click', function () {
       theme = theme === 'dark' ? 'light' : 'dark';
-      localStorage.setItem(STORAGE_KEY, theme);
+      localStorage.setItem(THEME_KEY, theme);
       applyTheme(theme);
     });
   }
 
+  // Language
+  function getPreferredLang() {
+    var saved = localStorage.getItem(LANG_KEY);
+    if (saved === 'pt' || saved === 'en') return saved;
+    return navigator.language && navigator.language.toLowerCase().indexOf('pt') === 0 ? 'pt' : 'pt';
+  }
+  function applyLang(lang) {
+    root.setAttribute('lang', lang === 'pt' ? 'pt-BR' : 'en');
+    document.querySelectorAll('[data-pt]').forEach(function (el) {
+      var text = lang === 'pt' ? el.getAttribute('data-pt') : el.getAttribute('data-en');
+      if (text !== null) el.textContent = text;
+    });
+    var label = document.getElementById('lang-label');
+    if (label) label.textContent = lang === 'pt' ? 'EN' : 'PT';
+  }
+  var lang = getPreferredLang();
+  applyLang(lang);
+  var langToggle = document.getElementById('lang-toggle');
+  if (langToggle) {
+    langToggle.addEventListener('click', function () {
+      lang = lang === 'pt' ? 'en' : 'pt';
+      localStorage.setItem(LANG_KEY, lang);
+      applyLang(lang);
+    });
+  }
+
+  // Reveal + skill bars
   if ('IntersectionObserver' in window) {
     document.body.classList.add('js-ready');
     var revealObserver = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) entry.target.classList.add('is-visible');
       });
-    }, { threshold: 0.15 });
+    }, { threshold: 0.12 });
     document.querySelectorAll('[data-reveal]').forEach(function (el) { revealObserver.observe(el); });
 
     var skillsObserver = new IntersectionObserver(function (entries) {
@@ -523,6 +857,21 @@
     document.querySelectorAll('[data-skills]').forEach(function (el) { skillsObserver.observe(el); });
   } else {
     document.querySelectorAll('[data-skillbar]').forEach(function (bar) { bar.classList.add('is-visible'); });
+  }
+
+  // Carousel
+  var track = document.getElementById('carousel-track');
+  var prevBtn = document.getElementById('carousel-prev');
+  var nextBtn = document.getElementById('carousel-next');
+  if (track && prevBtn && nextBtn) {
+    function scrollByCard(dir) {
+      var slide = track.querySelector('.carousel-slide');
+      var gap = 20;
+      var amount = slide ? (slide.offsetWidth + gap) * dir : 300 * dir;
+      track.scrollBy({ left: amount, behavior: 'smooth' });
+    }
+    prevBtn.addEventListener('click', function () { scrollByCard(-1); });
+    nextBtn.addEventListener('click', function () { scrollByCard(1); });
   }
 })();
 </script>
