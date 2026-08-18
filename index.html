@@ -45,6 +45,18 @@
     transition: background 0.35s ease, color 0.35s ease;
     overflow-x: hidden;
   }
+  #kite-bg {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    pointer-events: none;
+    z-index: 0;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #kite-bg { display: none; }
+  }
   a { color: var(--accent); text-decoration: none; transition: color 0.2s ease; }
   a:hover { filter: brightness(1.25); }
   .mono { font-family: 'Barlow', ui-monospace, monospace; letter-spacing: 0.02em; }
@@ -276,6 +288,8 @@
 </style>
 </head>
 <body>
+
+<canvas id="kite-bg" aria-hidden="true"></canvas>
 
 <div style="position:relative; overflow:hidden;">
 
@@ -876,6 +890,348 @@
     prevBtn.addEventListener('click', function () { scrollByCard(-1); });
     nextBtn.addEventListener('click', function () { scrollByCard(1); });
   }
+})();
+</script>
+
+<script>
+// Pipa CriAugu — background animado: o octaedro do símbolo segue o cursor
+// com atraso, arrastando uma cauda em corrente, e se desfaz em supernova ao clique.
+(function () {
+  var canvas = document.getElementById('kite-bg');
+  if (!canvas) return;
+  var ctx = canvas.getContext('2d');
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  var DPR = Math.min(window.devicePixelRatio || 1, 2);
+  var W, H;
+
+  function cssVar(name) {
+    return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+  }
+  function hexToRgba(hex, alpha) {
+    var m = (hex || '').trim().match(/^#([0-9a-f]{6})$/i);
+    if (!m) return hex;
+    var num = parseInt(m[1], 16);
+    var r = (num >> 16) & 255, g = (num >> 8) & 255, b = num & 255;
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + alpha + ')';
+  }
+  // faint (hidden-edge) tone: accent blended toward transparent, theme-agnostic
+  function faintTone() { return hexToRgba(cssVar('--accent'), 0.28); }
+
+  function resize() {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = W * DPR;
+    canvas.height = H * DPR;
+    canvas.style.width = W + 'px';
+    canvas.style.height = H + 'px';
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ---- Flight: eases toward the pointer with a trailing delay ----
+  var t = 0;
+  var pointer = { x: 0, y: 0 };
+  var head = { x: 0, y: 0 };
+  var heading = 0;
+  var HEAD_EASE = 0.045;
+  var hasPointer = false;
+
+  function setPointerFromEvent(e) {
+    var touch = e.touches && e.touches[0];
+    pointer.x = touch ? touch.clientX : e.clientX;
+    pointer.y = touch ? touch.clientY : e.clientY;
+    hasPointer = true;
+  }
+  window.addEventListener('mousemove', setPointerFromEvent, { passive: true });
+  window.addEventListener('touchmove', setPointerFromEvent, { passive: true });
+  window.addEventListener('touchstart', setPointerFromEvent, { passive: true });
+
+  function idleTarget(time) {
+    var cx = W * 0.5, cy = H * 0.4;
+    var ax = W * 0.28, ay = H * 0.22;
+    return {
+      x: cx + ax * Math.sin(time * 0.9) * Math.cos(time * 0.31 + 1.2),
+      y: cy + ay * Math.sin(time * 0.61 + 0.6) * Math.cos(time * 0.19)
+    };
+  }
+
+  function updateHead() {
+    var target = hasPointer ? pointer : idleTarget(t);
+    var prevX = head.x, prevY = head.y;
+    head.x += (target.x - head.x) * HEAD_EASE;
+    head.y += (target.y - head.y) * HEAD_EASE;
+    var vx = head.x - prevX, vy = head.y - prevY;
+    if (Math.hypot(vx, vy) > 0.15) heading = Math.atan2(vy, vx);
+  }
+
+  // ---- Kite geometry: a true 3D octahedron, echoing the CriAugu mark ----
+  var VERTS = [
+    { x: 1.0, y: 0, z: 0 },     // 0 nose
+    { x: -1.0, y: 0, z: 0 },    // 1 tail
+    { x: 0, y: -0.62, z: 0 },   // 2 top
+    { x: 0, y: 0.62, z: 0 },    // 3 bottom
+    { x: 0, y: 0, z: 0.62 },    // 4 front
+    { x: 0, y: 0, z: -0.62 }    // 5 back
+  ];
+  var EDGES = [[0,2],[0,3],[0,4],[0,5],[1,2],[1,3],[1,4],[1,5]];
+
+  function rotateY(p, a) { var c=Math.cos(a), s=Math.sin(a); return { x:p.x*c+p.z*s, y:p.y, z:-p.x*s+p.z*c }; }
+  function rotateX(p, a) { var c=Math.cos(a), s=Math.sin(a); return { x:p.x, y:p.y*c-p.z*s, z:p.y*s+p.z*c }; }
+  function rotateZ(p, a) { var c=Math.cos(a), s=Math.sin(a); return { x:p.x*c-p.y*s, y:p.x*s+p.y*c, z:p.z }; }
+
+  function projectKite(cx, cy, headingNow, scale, tNow) {
+    var s = 60 * scale;
+    var roll = Math.sin(tNow * 0.7) * 0.35;
+    var pitch = Math.sin(tNow * 1.3 + 1.0) * 0.22 + 0.15;
+    return VERTS.map(function (v) {
+      var p = rotateZ(v, roll);
+      p = rotateX(p, pitch);
+      p = rotateY(p, -headingNow);
+      var persp = 1 / (1 + p.z * 0.18);
+      return { sx: cx + p.x * s * persp, sy: cy + p.y * s * persp, z: p.z, persp: persp };
+    });
+  }
+
+  function drawKite(cx, cy, headingNow, scale, tNow) {
+    var projected = projectKite(cx, cy, headingNow, scale, tNow);
+    var accent = cssVar('--accent');
+    var faint = faintTone();
+
+    ctx.lineJoin = 'round';
+    ctx.lineCap = 'round';
+
+    var edgeList = EDGES.map(function (e) {
+      var a = projected[e[0]], b = projected[e[1]];
+      return { a: a, b: b, avgZ: (a.z + b.z) / 2 };
+    });
+    edgeList.sort(function (m, n) { return m.avgZ - n.avgZ; });
+
+    edgeList.forEach(function (e) {
+      var behind = e.avgZ < -0.02;
+      ctx.strokeStyle = behind ? faint : accent;
+      ctx.globalAlpha = behind ? 0.55 : 0.85;
+      ctx.lineWidth = Math.max(1, (behind ? 1.3 : 2) * scale);
+      if (behind) ctx.setLineDash([4 * scale + 1, 5 * scale + 1]); else ctx.setLineDash([]);
+      ctx.beginPath();
+      ctx.moveTo(e.a.sx, e.a.sy);
+      ctx.lineTo(e.b.sx, e.b.sy);
+      ctx.stroke();
+    });
+    ctx.setLineDash([]);
+
+    ctx.strokeStyle = accent;
+    ctx.globalAlpha = 0.7;
+    ctx.lineWidth = Math.max(1, 1.5 * scale);
+    ctx.beginPath();
+    ctx.moveTo(projected[0].sx, projected[0].sy);
+    ctx.lineTo(projected[1].sx, projected[1].sy);
+    ctx.stroke();
+
+    ctx.fillStyle = accent;
+    ctx.globalAlpha = 0.85;
+    projected.forEach(function (p) {
+      var r = Math.max(1.4, 2.3 * scale) * (0.75 + 0.25 * p.persp);
+      ctx.beginPath();
+      ctx.arc(p.sx, p.sy, r, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.globalAlpha = 1;
+
+    return { x: projected[1].sx, y: projected[1].sy };
+  }
+
+  // ---- Tail: a physical chain of short rigid links with nodes ----
+  var LINK_COUNT = 12;
+  var chain = null;
+
+  function initChain(anchor) {
+    chain = [];
+    for (var i = 0; i <= LINK_COUNT; i++) chain.push({ x: anchor.x, y: anchor.y });
+  }
+  function updateChain(anchor, linkLen) {
+    chain[0].x = anchor.x;
+    chain[0].y = anchor.y;
+    for (var i = 1; i < chain.length; i++) {
+      var prev = chain[i - 1], cur = chain[i];
+      var dx = cur.x - prev.x, dy = cur.y - prev.y;
+      var dist = Math.hypot(dx, dy) || 0.0001;
+      var ease = 0.32;
+      var targetX = prev.x + (dx / dist) * linkLen;
+      var targetY = prev.y + (dy / dist) * linkLen;
+      cur.x += (targetX - cur.x) * ease;
+      cur.y += (targetY - cur.y) * ease;
+      cur.y += 0.06 * linkLen * 0.02;
+    }
+  }
+  function drawTail() {
+    if (!chain) return;
+    var accent = cssVar('--accent');
+    var n = chain.length;
+    ctx.strokeStyle = accent;
+    ctx.lineCap = 'round';
+    ctx.lineJoin = 'round';
+    for (var i = 0; i < n - 1; i++) {
+      var fade = 1 - i / (n - 1);
+      ctx.globalAlpha = 0.12 + 0.4 * fade;
+      ctx.lineWidth = Math.max(0.8, 1.8 * fade);
+      ctx.beginPath();
+      ctx.moveTo(chain[i].x, chain[i].y);
+      ctx.lineTo(chain[i + 1].x, chain[i + 1].y);
+      ctx.stroke();
+    }
+    ctx.fillStyle = accent;
+    for (var j = 1; j < n; j++) {
+      var fadeN = 1 - j / (n - 1);
+      ctx.globalAlpha = 0.12 + 0.5 * fadeN;
+      ctx.beginPath();
+      ctx.arc(chain[j].x, chain[j].y, Math.max(1, 2.4 * fadeN), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  // ---- Supernova: click blows the kite apart, then it reforms ----
+  var nova = null;
+  var currentScale = 0.75;
+
+  function triggerNova(cx, cy, scale, headingNow) {
+    var particles = [];
+    var projected = projectKite(cx, cy, headingNow, scale, t);
+    var edgePairsFull = EDGES.concat([[0, 1]]);
+
+    edgePairsFull.forEach(function (e) {
+      var a = projected[e[0]], b = projected[e[1]];
+      var mx = (a.sx + b.sx) / 2, my = (a.sy + b.sy) / 2;
+      var ang = Math.atan2(my - cy, mx - cx) || Math.random() * Math.PI * 2;
+      var speedMag = 2 + Math.random() * 3;
+      particles.push({
+        x: mx, y: my,
+        vx: Math.cos(ang) * speedMag + (Math.random() - 0.5),
+        vy: Math.sin(ang) * speedMag + (Math.random() - 0.5),
+        rot: Math.atan2(b.sy - a.sy, b.sx - a.sx),
+        spin: (Math.random() - 0.5) * 0.2,
+        len: Math.hypot(b.sx - a.sx, b.sy - a.sy),
+        kind: 'edge'
+      });
+    });
+
+    var sparkCount = 20;
+    for (var i = 0; i < sparkCount; i++) {
+      var a2 = (i / sparkCount) * Math.PI * 2 + Math.random() * 0.3;
+      var sp = 3 + Math.random() * 4.5;
+      particles.push({ x: cx, y: cy, vx: Math.cos(a2) * sp, vy: Math.sin(a2) * sp, kind: 'spark', r: 1 + Math.random() * 1.8 });
+    }
+
+    nova = { age: 0, duration: 1100, cx: cx, cy: cy, particles: particles };
+  }
+
+  window.addEventListener('click', function () {
+    triggerNova(head.x, head.y, currentScale, heading);
+  }, { passive: true });
+
+  function drawNova(dt) {
+    if (!nova) return;
+    nova.age += dt;
+    var progress = Math.min(1, nova.age / nova.duration);
+    var fade = 1 - progress;
+    var accent = cssVar('--accent');
+
+    if (progress < 0.35) {
+      var flashA = 1 - progress / 0.35;
+      var grad = ctx.createRadialGradient(nova.cx, nova.cy, 0, nova.cx, nova.cy, 120);
+      grad.addColorStop(0, hexToRgba('#ffffff', 0.7 * flashA));
+      grad.addColorStop(0.35, hexToRgba(accent, 0.45 * flashA));
+      grad.addColorStop(1, hexToRgba(accent, 0));
+      ctx.fillStyle = grad;
+      ctx.beginPath();
+      ctx.arc(nova.cx, nova.cy, 120, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    nova.particles.forEach(function (pt) {
+      pt.x += pt.vx; pt.y += pt.vy;
+      pt.vx *= 0.965; pt.vy *= 0.965;
+      if (pt.kind === 'edge') {
+        pt.rot += pt.spin;
+        ctx.save();
+        ctx.translate(pt.x, pt.y);
+        ctx.rotate(pt.rot);
+        ctx.strokeStyle = accent;
+        ctx.globalAlpha = fade * 0.85;
+        ctx.lineWidth = 1.8;
+        ctx.lineCap = 'round';
+        ctx.beginPath();
+        ctx.moveTo(-pt.len / 2, 0);
+        ctx.lineTo(pt.len / 2, 0);
+        ctx.stroke();
+        ctx.restore();
+      } else {
+        ctx.beginPath();
+        ctx.fillStyle = accent;
+        ctx.globalAlpha = fade * 0.8;
+        ctx.arc(pt.x, pt.y, pt.r * fade, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    });
+    ctx.globalAlpha = 1;
+
+    if (progress >= 1) nova = null;
+  }
+
+  var rebirth = 0;
+  var lastTime = null;
+
+  function frame(now) {
+    if (lastTime === null) lastTime = now;
+    var dt = now - lastTime;
+    lastTime = now;
+    t += dt * 0.00035;
+
+    ctx.clearRect(0, 0, W, H);
+    updateHead();
+
+    var depth = 0.85 + 0.15 * Math.sin(t * 0.5);
+    var scale = 0.75 * depth * Math.min(W, H) / 900;
+    scale = Math.max(0.45, Math.min(scale, 0.95));
+    currentScale = scale;
+
+    var novaActive = !!nova;
+    var kiteHidden = novaActive && nova.age < nova.duration * 0.8;
+
+    if (kiteHidden) rebirth = 0;
+    else if (rebirth < 1) rebirth = Math.min(1, rebirth + dt / 260);
+
+    if (!kiteHidden) {
+      var drawScale = scale * (0.4 + 0.6 * rebirth);
+      var rollPeek = Math.sin(t * 0.7) * 0.35;
+      var pitchPeek = Math.sin(t * 1.3 + 1.0) * 0.22 + 0.15;
+      var tailLocal = rotateZ(VERTS[1], rollPeek);
+      tailLocal = rotateX(tailLocal, pitchPeek);
+      tailLocal = rotateY(tailLocal, -heading);
+      var s = 60 * drawScale;
+      var perspTail = 1 / (1 + tailLocal.z * 0.18);
+      var anchor = { x: head.x + tailLocal.x * s * perspTail, y: head.y + tailLocal.y * s * perspTail };
+
+      var linkLen = 14 * drawScale;
+      if (!chain) initChain(anchor);
+      updateChain(anchor, linkLen);
+      drawTail();
+      drawKite(head.x, head.y, heading, drawScale, t);
+    } else if (chain) {
+      updateChain(chain[0], 14 * scale * 0.4);
+      drawTail();
+    }
+
+    if (novaActive) drawNova(dt);
+
+    requestAnimationFrame(frame);
+  }
+
+  head.x = W * 0.5;
+  head.y = H * 0.4;
+  requestAnimationFrame(frame);
 })();
 </script>
 </body>
