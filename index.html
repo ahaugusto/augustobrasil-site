@@ -272,7 +272,8 @@
   .contact-row { display: flex; align-items: center; justify-content: space-between; gap: 40px; }
   .hero-title { font-size: 56px; line-height: 1.1; }
   .ai-row { display: flex; align-items: center; gap: 56px; }
-  .links-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 20px; }
+  .links-grid { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 20px; }
+  .study-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
   .cert-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 12px; }
 
   @media (max-width: 960px) {
@@ -287,7 +288,165 @@
     .ai-row { flex-direction: column; }
     .links-grid { grid-template-columns: 1fr 1fr; }
     .cert-grid { grid-template-columns: 1fr 1fr; }
+    .study-grid { grid-template-columns: 1fr; }
     .carousel-slide { width: 300px; }
+  }
+
+  /* Stack of sheets */
+  .stack-wrap {
+    position: relative;
+  }
+  .stack {
+    position: relative;
+    min-height: 340px;
+    overflow-anchor: none;
+  }
+  .stack-card {
+    position: absolute;
+    inset: 0;
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 40px;
+    display: grid;
+    grid-template-columns: 220px 1fr 200px;
+    gap: 32px;
+    align-items: start;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+    transition: transform 0.45s cubic-bezier(0.16,1,0.3,1), opacity 0.4s ease, box-shadow 0.3s ease;
+    transform-origin: 50% 100%;
+  }
+  .stack-card:hover { box-shadow: 0 24px 60px -18px rgba(0,0,0,0.4); }
+  .stack-card.is-expanded {
+    position: relative;
+    cursor: default;
+    transform: none !important;
+    display: block;
+  }
+  .stack-card.is-expanded:hover { box-shadow: var(--shadow); }
+  .stack-card-back { pointer-events: none; }
+  .stack-card-hidden { opacity: 0; pointer-events: none; }
+  .stack.has-expanded .stack-card:not(.is-expanded) { display: none; }
+  .stack-expand-hint {
+    position: absolute;
+    right: 24px;
+    bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 11.5px;
+    color: var(--ink-dim);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 12px;
+    pointer-events: none;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .stack-card:hover .stack-expand-hint { border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 960px) {
+    .stack-expand-hint { position: static; margin-top: 8px; align-self: flex-start; }
+  }
+  .stack-progress {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  .stack-progress-dot {
+    width: 7px; height: 7px;
+    border-radius: 999px;
+    background: var(--line);
+    transition: background 0.25s ease, transform 0.25s ease;
+  }
+  .stack-progress-dot.is-active { background: var(--accent); transform: scale(1.3); }
+  .stack-card-expanded-body {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    animation: rise-in 0.4s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  .stack-card-close {
+    align-self: flex-end;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--ink-dim);
+    background: transparent;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: border-color 0.2s ease, color 0.2s ease;
+  }
+  .stack-card-close:hover { border-color: var(--accent); color: var(--accent); }
+  @media (max-width: 960px) {
+    .stack-card { grid-template-columns: 1fr; padding: 28px; }
+  }
+
+  /* Floating prev/next nav, shown while a sheet is expanded */
+  .stack-nav-btn {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 48px; height: 48px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    color: var(--ink);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    z-index: 200;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+  .stack-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .stack-wrap.is-ready .stack-nav-btn { display: flex; }
+  .stack-nav-prev { left: max(16px, calc((100vw - 1280px) / 2 - 64px)); }
+  .stack-nav-next { right: max(16px, calc((100vw - 1280px) / 2 - 64px)); }
+  @media (max-width: 1180px) {
+    .stack-nav-btn { width: 40px; height: 40px; }
+    .stack-nav-prev { left: 8px; }
+    .stack-nav-next { right: 8px; }
+  }
+  @media (max-width: 700px) {
+    .stack-nav-btn { top: auto; bottom: 24px; transform: none; }
+    .stack-nav-prev { left: 24px; }
+    .stack-nav-next { right: 24px; }
+  }
+
+  /* Narrative & media inside an expanded stack sheet */
+  .stack-narrative-section { display: flex; flex-direction: column; gap: 8px; }
+  .stack-narrative-section h4 {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .stack-narrative-section p { font-size: 14.5px; line-height: 1.7; }
+  .stack-media-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .stack-media-item { display: flex; flex-direction: column; gap: 8px; }
+  .stack-media-item img, .stack-media-item video {
+    width: 100%;
+    display: block;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+  }
+  .stack-media-item span {
+    font-size: 12px;
+    color: var(--ink-dim);
+    line-height: 1.4;
   }
 </style>
 </head>
@@ -305,6 +464,8 @@
     </a>
     <nav class="nav-links">
       <a href="#trabalhos" style="font-size:14px; color:var(--ink-dim);" data-pt="Trabalhos" data-en="Work">Trabalhos</a>
+      <a href="#pessoais" style="font-size:14px; color:var(--ink-dim);" data-pt="Pessoais" data-en="Personal">Pessoais</a>
+      <a href="#estudos" style="font-size:14px; color:var(--ink-dim);" data-pt="Estudos" data-en="Studies">Estudos</a>
       <a href="#ai-building" style="font-size:14px; color:var(--ink-dim);" data-pt="AI Building" data-en="AI Building">AI Building</a>
       <a href="#processo" style="font-size:14px; color:var(--ink-dim);" data-pt="Processo" data-en="Process">Processo</a>
       <a href="#skills" style="font-size:14px; color:var(--ink-dim);" data-pt="Skills" data-en="Skills">Skills</a>
@@ -391,160 +552,55 @@
       Produtos institucionais complexos, ferramentas próprias construídas com IA, e um plugin nascido da própria dor de handoff entre design e dados.
     </p>
 
-    <div class="reveal-stagger" data-reveal style="display:flex; flex-direction:column; gap:1px; background:var(--line); border-radius:8px; overflow:hidden;">
+    <div class="stack-wrap reveal" data-reveal id="stack-trabalhos" data-stack-group="trabalhos"></div>
+  </div>
 
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Ferramenta própria · AI Building" data-en="Own tool · AI Building">Ferramenta própria · AI Building</div>
-          <h3 style="font-size:21px;">Tusab</h3>
-        </div>
-        <p style="font-size:14.5px;"
-          data-pt="Sistema de gestão de conhecimento pessoal com IA local: indexa YouTube, PDFs, áudio e documentos, e permite conversar com esse conteúdo citando a fonte exata — sem alucinação. Nasceu da minha própria frustração como aluno de um curso que publicava mais vídeos do que eu conseguia acompanhar. Construído com Claude Code, FastAPI, RAG local (BM25 + reranking) e um sistema de 24 agentes especializados que documentam cada decisão de arquitetura."
-          data-en="Personal knowledge management system with local AI: indexes YouTube, PDFs, audio and documents, and lets you chat with that content citing the exact source — no hallucination. Born from my own frustration as a student in a course that published more videos than I could keep up with. Built with Claude Code, FastAPI, local RAG (BM25 + reranking), and a system of 24 specialized agents that document every architecture decision.">
-          Sistema de gestão de conhecimento pessoal com IA local: indexa YouTube, PDFs, áudio e documentos, e permite conversar com esse conteúdo citando a fonte exata — sem alucinação. Nasceu da minha própria frustração como aluno de um curso que publicava mais vídeos do que eu conseguia acompanhar. Construído com Claude Code, FastAPI, RAG local (BM25 + reranking) e um sistema de 24 agentes especializados que documentam cada decisão de arquitetura.
-        </p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">Electron</span>
-          <span class="tag">FastAPI</span>
-          <span class="tag" data-pt="RAG local" data-en="Local RAG">RAG local</span>
-          <a href="https://github.com/ahaugusto/tusab" target="_blank" rel="noopener" style="font-size:12px;">GitHub ↗</a>
-        </div>
-      </div>
+  <!-- PROJETOS PESSOAIS & PARALELOS -->
+  <div id="pessoais" class="wrap" style="padding-top: 40px; padding-bottom: 120px; border-top:1px solid var(--line);">
+    <div class="reveal" data-reveal style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:12px;">
+      <h2 style="font-size:32px;" data-pt="Projetos pessoais &amp; paralelos" data-en="Personal &amp; side projects">Projetos pessoais &amp; paralelos</h2>
+      <span class="mono" style="font-size:13px; color:var(--ink-dim);" data-pt="01.1 — Fora do expediente" data-en="01.1 — Off the clock">01.1 — Fora do expediente</span>
+    </div>
+    <p class="reveal" data-reveal style="font-size:15px; margin-bottom:48px; max-width:680px;"
+      data-pt="Sites, sistemas e identidades visuais que fiz por conta própria, para comunidades e pessoas próximas — sem cliente institucional por trás, só vontade de resolver o problema de alguém."
+      data-en="Sites, systems and visual identities I built on my own, for communities and people close to me — no institutional client behind them, just wanting to solve someone's actual problem.">
+      Sites, sistemas e identidades visuais que fiz por conta própria, para comunidades e pessoas próximas — sem cliente institucional por trás, só vontade de resolver o problema de alguém.
+    </p>
 
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Ferramenta própria · Iniciativa pessoal" data-en="Own tool · Personal initiative">Ferramenta própria · Iniciativa pessoal</div>
-          <h3 style="font-size:21px;">BI Bridge</h3>
-        </div>
-        <p style="font-size:14.5px;"
-          data-pt="O handoff de dashboards do Figma para BI costuma ser manual e impreciso — analistas perdem horas replicando cores e tipografia, enquanto specs de negócio (DAX/SQL) se perdem em alinhamentos informais. Criei o BI Bridge para eliminar esse 'telefone sem fio': um plugin Figma que extrai design tokens, gera guias pixel-perfect e empacota a árvore semântica do layout em formato MCP, pronto para alimentar Claude, ChatGPT ou Cursor e gerar componentes de dados automaticamente. Nasceu depois do projeto de dashboards que fiz para o Ministério da Saúde — não é vinculado a nenhum cliente, é meu, sob a CriAugu."
-          data-en="Handing off Figma dashboards to BI tools is usually manual and imprecise — analysts lose hours replicating colors and typography while critical business specs (DAX/SQL) get lost in informal back-and-forth. I built BI Bridge to kill that game of telephone: a Figma plugin that extracts design tokens, generates pixel-perfect guides, and packages the layout's semantic tree in MCP format, ready to feed Claude, ChatGPT or Cursor to auto-generate data components. It came out of a dashboard project I did for Brazil's Ministry of Health — it isn't tied to any client, it's mine, under CriAugu.">
-          O handoff de dashboards do Figma para BI costuma ser manual e impreciso — analistas perdem horas replicando cores e tipografia, enquanto specs de negócio (DAX/SQL) se perdem em alinhamentos informais. Criei o BI Bridge para eliminar esse "telefone sem fio": um plugin Figma que extrai design tokens, gera guias pixel-perfect e empacota a árvore semântica do layout em formato MCP, pronto para alimentar Claude, ChatGPT ou Cursor e gerar componentes de dados automaticamente. Nasceu depois do projeto de dashboards que fiz para o Ministério da Saúde — não é vinculado a nenhum cliente, é meu, sob a CriAugu.
-        </p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">Figma API</span>
-          <span class="tag">MCP</span>
-          <span class="tag" data-pt="Autoria própria" data-en="Own authorship">Autoria própria</span>
-          <a href="https://www.figma.com/community/plugin/1607744231649281413/bi-bridge-design-to-data" target="_blank" rel="noopener" style="font-size:12px;" data-pt="Ver no Figma ↗" data-en="View on Figma ↗">Ver no Figma ↗</a>
-        </div>
-      </div>
+    <div class="stack-wrap reveal" data-reveal id="stack-pessoais" data-stack-group="pessoais"></div>
+  </div>
 
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Fóton · Caixa Econômica Federal" data-en="Fóton · Caixa Econômica Federal">Fóton · Caixa Econômica Federal</div>
-          <h3 style="font-size:21px;">Handex — Handoff Express</h3>
-        </div>
-        <p style="font-size:14.5px;"
-          data-pt="Plugin Figma para o Design System Corporativo da Caixa que automatiza o handoff de design para desenvolvimento: escaneia tokens de UI e os compara automaticamente contra as bibliotecas oficiais do design system, anota specs e medidas direto no canvas, mapeia fluxos de tela e gera uma ficha técnica completa com declaração de conformidade — publicado na Figma Community e em uso ativo pelo time."
-          data-en="Figma plugin for Caixa's Corporate Design System that automates design-to-dev handoff: scans UI tokens and auto-compares them against the official design system libraries, annotates specs and measurements directly on the canvas, maps screen flows, and generates a full technical spec sheet with a compliance statement — published on Figma Community and in active use by the team.">
-          Plugin Figma para o Design System Corporativo da Caixa que automatiza o handoff de design para desenvolvimento: escaneia tokens de UI e os compara automaticamente contra as bibliotecas oficiais do design system, anota specs e medidas direto no canvas, mapeia fluxos de tela e gera uma ficha técnica completa com declaração de conformidade — publicado na Figma Community e em uso ativo pelo time.
-        </p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">Figma API</span>
-          <span class="tag" data-pt="Design System" data-en="Design System">Design System</span>
-          <span class="tag" data-pt="Em produção" data-en="In production">Em produção</span>
-        </div>
-      </div>
+  <!-- PROJETOS DE ESTUDO -->
+  <div id="estudos" class="wrap" style="padding-top: 40px; padding-bottom: 120px; border-top:1px solid var(--line);">
+    <div class="reveal" data-reveal style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:12px;">
+      <h2 style="font-size:32px;" data-pt="Projetos de estudo" data-en="Study projects">Projetos de estudo</h2>
+      <span class="mono" style="font-size:13px; color:var(--ink-dim);" data-pt="01.2 — Prática" data-en="01.2 — Practice">01.2 — Prática</span>
+    </div>
+    <p class="reveal" data-reveal style="font-size:15px; margin-bottom:48px; max-width:680px;"
+      data-pt="Exercícios de formação, não trabalhos para cliente — usados para praticar técnicas específicas de UX/UI e Figma avançado."
+      data-en="Training exercises, not client work — used to practice specific UX/UI techniques and advanced Figma.">
+      Exercícios de formação, não trabalhos para cliente — usados para praticar técnicas específicas de UX/UI e Figma avançado.
+    </p>
 
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Fóton · Caixa Econômica Federal" data-en="Fóton · Caixa Econômica Federal">Fóton · Caixa Econômica Federal</div>
-          <h3 style="font-size:21px;">Prisma</h3>
-        </div>
-        <p style="font-size:14.5px;"
-          data-pt="Plugin Figma para auditar a maturidade do processo de UX por trás de um produto — não só o protótipo, mas as evidências de descoberta, definição, ideação e validação, além de aderência a design system e acessibilidade. Em desenvolvimento ativo, com múltiplos agentes de IA orquestrados avaliando cada dimensão."
-          data-en="Figma plugin that audits the maturity of the UX process behind a product — not just the prototype, but the evidence of discovery, definition, ideation and validation, plus design system and accessibility adherence. Actively in development, with multiple orchestrated AI agents assessing each dimension.">
-          Plugin Figma para auditar a maturidade do processo de UX por trás de um produto — não só o protótipo, mas as evidências de descoberta, definição, ideação e validação, além de aderência a design system e acessibilidade. Em desenvolvimento ativo, com múltiplos agentes de IA orquestrados avaliando cada dimensão.
-        </p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag" data-pt="UX Ops" data-en="UX Ops">UX Ops</span>
-          <span class="tag" data-pt="Em desenvolvimento" data-en="In development">Em desenvolvimento</span>
-        </div>
-      </div>
-
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Fóton · Caixa Econômica Federal" data-en="Fóton · Caixa Econômica Federal">Fóton · Caixa Econômica Federal</div>
-          <h3 style="font-size:21px;">ResponsivUX</h3>
-        </div>
-        <p style="font-size:14.5px;"
-          data-pt="Plugin Figma que gera layouts responsivos automaticamente em múltiplos breakpoints (768px a 3840px), com Auto Layout responsivo e constraints inteligentes aplicadas a partir de um único frame selecionado — integrado à identidade visual do Design System da Caixa."
-          data-en="Figma plugin that auto-generates responsive layouts across multiple breakpoints (768px to 3840px), with responsive Auto Layout and smart constraints applied from a single selected frame — integrated with Caixa's Design System visual identity.">
-          Plugin Figma que gera layouts responsivos automaticamente em múltiplos breakpoints (768px a 3840px), com Auto Layout responsivo e constraints inteligentes aplicadas a partir de um único frame selecionado — integrado à identidade visual do Design System da Caixa.
-        </p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">Figma API</span>
-          <span class="tag" data-pt="Layout responsivo" data-en="Responsive layout">Layout responsivo</span>
-        </div>
-      </div>
-
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Governança pública" data-en="Public governance">Governança pública</div>
-          <h3 style="font-size:21px;">Plataforma Brasil</h3>
-        </div>
-        <p style="font-size:14.5px;"
-          data-pt="Sistema nacional de governança regulatória de pesquisa em saúde. Liderei a virada de uma interface de navegabilidade complexa para um redesign orientado a jornada — discovery, arquitetura de informação, prototipação e testes de usabilidade, em conformidade com Gov.BR Design System (eMAG/WCAG)."
-          data-en="National system for research governance in health. I led the shift from a hard-to-navigate interface to a journey-driven redesign — discovery, information architecture, prototyping and usability testing, compliant with the Gov.BR Design System (eMAG/WCAG).">
-          Sistema nacional de governança regulatória de pesquisa em saúde. Liderei a virada de uma interface de navegabilidade complexa para um redesign orientado a jornada — discovery, arquitetura de informação, prototipação e testes de usabilidade, em conformidade com Gov.BR Design System (eMAG/WCAG).
-        </p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag" data-pt="UX Research" data-en="UX Research">UX Research</span>
-          <span class="tag" data-pt="Design System" data-en="Design System">Design System</span>
-          <span class="tag" data-pt="Acessibilidade" data-en="Accessibility">Acessibilidade</span>
-        </div>
-      </div>
-
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Design system em BI" data-en="BI design system">Design system em BI</div>
-          <h3 style="font-size:21px;" data-pt="Guia de Estilo para Dashboards" data-en="Dashboard Style Guide">Guia de Estilo para Dashboards</h3>
-        </div>
-        <p style="font-size:14.5px;"
-          data-pt="Design system construído integralmente dentro do Power BI — não um manual estático, mas um sistema vivo: grid de 12 colunas navegável no próprio painel de camadas, componentes plug-and-play, tooltips com orientação de montagem e padrões de acessibilidade obrigatórios. Esse projeto foi a origem direta do BI Bridge."
-          data-en="Design system built entirely inside Power BI — not a static manual, but a living system: a 12-column grid navigable in the layer panel itself, plug-and-play components, assembly-guidance tooltips, and mandatory accessibility standards. This project was the direct origin of BI Bridge.">
-          Design system construído integralmente dentro do Power BI — não um manual estático, mas um sistema vivo: grid de 12 colunas navegável no próprio painel de camadas, componentes plug-and-play, tooltips com orientação de montagem e padrões de acessibilidade obrigatórios. Esse projeto foi a origem direta do BI Bridge.
-        </p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag">Power BI</span>
-          <span class="tag" data-pt="Design System" data-en="Design System">Design System</span>
-          <span class="tag" data-pt="Dataviz" data-en="Dataviz">Dataviz</span>
-        </div>
-      </div>
-
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;" data-pt="Canais físicos" data-en="Physical channels">Canais físicos</div>
-          <h3 style="font-size:21px;">Caixa Econômica Federal</h3>
-        </div>
-        <p style="font-size:14.5px;"
-          data-pt="Redesign integral do menu lateral e de uma tela única de crédito para pessoa física, dentro do Design System da Caixa. Discovery, wireframes multi-fidelidade, prototipação, testes de usabilidade e handoff completo para engenharia."
-          data-en="Full redesign of the side menu and a single unified credit screen for individual customers, within Caixa's Design System. Discovery, multi-fidelity wireframes, prototyping, usability testing and full handoff to engineering.">
-          Redesign integral do menu lateral e de uma tela única de crédito para pessoa física, dentro do Design System da Caixa. Discovery, wireframes multi-fidelidade, prototipação, testes de usabilidade e handoff completo para engenharia.
-        </p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag" data-pt="Prototipação" data-en="Prototyping">Prototipação</span>
-          <span class="tag">Handoff</span>
-        </div>
-      </div>
-
-      <div class="row-hover work-row" style="background:var(--bg); padding:40px;">
-        <div>
-          <div class="eyebrow" style="margin-bottom:8px;" data-pt="EdTech corporativa" data-en="Corporate EdTech">EdTech corporativa</div>
-          <h3 style="font-size:21px;">Digibee Academy</h3>
-        </div>
-        <p style="font-size:14.5px;"
-          data-pt="Como líder técnico, conduzi a gestão completa de um LMS (WordPress + LearnDash): redesign de jornada, design instrucional, landing pages e análise de métricas de UX — a plataforma tornou-se um subproduto diferencial da empresa."
-          data-en="As tech lead, I ran the full management of an LMS (WordPress + LearnDash): journey redesign, instructional design, landing pages and UX metrics analysis — the platform became a key differentiator product for the company.">
-          Como líder técnico, conduzi a gestão completa de um LMS (WordPress + LearnDash): redesign de jornada, design instrucional, landing pages e análise de métricas de UX — a plataforma tornou-se um subproduto diferencial da empresa.
-        </p>
-        <div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">
-          <span class="tag" data-pt="Tech Lead" data-en="Tech Lead">Tech Lead</span>
-          <span class="tag">LMS</span>
-          <span class="tag" data-pt="UX Writing" data-en="UX Writing">UX Writing</span>
-        </div>
-      </div>
-
+    <div class="reveal-stagger study-grid" data-reveal>
+      <a href="https://www.figma.com/community/file/1409932332742817466/nabook-aprender-e-divertido" target="_blank" rel="noopener" class="card row-hover" style="padding:28px; display:flex; flex-direction:column; gap:10px;">
+        <span class="eyebrow" data-pt="Exercício de certificação" data-en="Certification exercise">Exercício de certificação</span>
+        <span style="color:var(--ink); font-size:18px; font-family:'Quicksand',sans-serif; font-weight:600;">Nabook — Aprender e Divertido ↗</span>
+        <span style="font-size:13.5px; color:var(--ink-dim);"
+          data-pt="Projeto feito para a certificação de Especialista em UX e UI."
+          data-en="Project made for the UX/UI Specialist certification.">
+          Projeto feito para a certificação de Especialista em UX e UI.
+        </span>
+      </a>
+      <a href="https://www.figma.com/community/file/1385253487036788968/the-gamer-screen-project" target="_blank" rel="noopener" class="card row-hover" style="padding:28px; display:flex; flex-direction:column; gap:10px;">
+        <span class="eyebrow" data-pt="Exercício de curso" data-en="Course exercise">Exercício de curso</span>
+        <span style="color:var(--ink); font-size:18px; font-family:'Quicksand',sans-serif; font-weight:600;">The Gamer Screen Project ↗</span>
+        <span style="font-size:13.5px; color:var(--ink-dim);"
+          data-pt="Projeto de um curso de Figma avançado."
+          data-en="Project from an advanced Figma course.">
+          Projeto de um curso de Figma avançado.
+        </span>
+      </a>
     </div>
   </div>
 
@@ -758,6 +814,11 @@
         <span style="color:var(--ink); font-size:16px; font-family:'Quicksand',sans-serif; font-weight:600;" data-pt="Figma Community ↗" data-en="Figma Community ↗">Figma Community ↗</span>
         <span style="font-size:13px; color:var(--ink-dim);" data-pt="6 cases públicos, incluindo BI Bridge" data-en="6 public cases, including BI Bridge">6 cases públicos, incluindo BI Bridge</span>
       </a>
+      <a href="https://www.youtube.com/@CriAugu" target="_blank" rel="noopener" class="card row-hover" style="padding:24px; display:flex; flex-direction:column; gap:10px;">
+        <span class="eyebrow" data-pt="Vídeo" data-en="Video">Vídeo</span>
+        <span style="color:var(--ink); font-size:16px; font-family:'Quicksand',sans-serif; font-weight:600;">CriAugu ↗</span>
+        <span style="font-size:13px; color:var(--ink-dim);" data-pt="Canal do YouTube com processo e bastidores" data-en="YouTube channel with process and behind the scenes">Canal do YouTube com processo e bastidores</span>
+      </a>
     </div>
 
     <div class="reveal" data-reveal style="margin-bottom:20px;">
@@ -802,6 +863,407 @@
 
 </div>
 
+<script>
+// Cartões da pilha de "folhas": conteúdo compacto exibido no topo do baralho.
+var WORK_STACKS = {
+  trabalhos: [
+    { slug: 'tusab', eyebrow: { pt: 'Ferramenta própria · AI Building', en: 'Own tool · AI Building' }, title: 'Tusab',
+      desc: { pt: "Sistema de gestão de conhecimento pessoal com IA local: indexa YouTube, PDFs, áudio e documentos, e permite conversar com esse conteúdo citando a fonte exata — sem alucinação. Nasceu da minha própria frustração como aluno de um curso que publicava mais vídeos do que eu conseguia acompanhar. Passou por três nomes até virar produto — Brain'IAC, Sebayt e por fim Tusab — construído com Claude Code, FastAPI e RAG local (BM25 + reranking).",
+        en: "Personal knowledge management system with local AI: indexes YouTube, PDFs, audio and documents, and lets you chat with that content citing the exact source — no hallucination. Born from my own frustration as a student in a course that published more videos than I could keep up with. It went through three names before becoming a product — Brain'IAC, Sebayt, and finally Tusab — built with Claude Code, FastAPI and local RAG (BM25 + reranking)." },
+      tags: ['Electron', 'FastAPI', { pt: 'RAG local', en: 'Local RAG' }],
+      link: { href: 'https://github.com/ahaugusto/tusab', label: 'GitHub ↗' } },
+    { slug: 'bi-bridge', eyebrow: { pt: 'Ferramenta própria · Iniciativa pessoal', en: 'Own tool · Personal initiative' }, title: 'BI Bridge',
+      desc: { pt: 'O handoff de dashboards do Figma para BI costuma ser manual e impreciso — analistas perdem horas replicando cores e tipografia, enquanto specs de negócio (DAX/SQL) se perdem em alinhamentos informais. Criei o BI Bridge para eliminar esse "telefone sem fio": um plugin Figma que extrai design tokens, gera guias pixel-perfect e empacota a árvore semântica do layout em formato MCP, pronto para alimentar Claude, ChatGPT ou Cursor e gerar componentes de dados automaticamente. Nasceu depois do projeto de dashboards que fiz para o Ministério da Saúde — não é vinculado a nenhum cliente, é meu, sob a CriAugu.',
+        en: "Handing off Figma dashboards to BI tools is usually manual and imprecise — analysts lose hours replicating colors and typography while critical business specs (DAX/SQL) get lost in informal back-and-forth. I built BI Bridge to kill that game of telephone: a Figma plugin that extracts design tokens, generates pixel-perfect guides, and packages the layout's semantic tree in MCP format, ready to feed Claude, ChatGPT or Cursor to auto-generate data components. It came out of a dashboard project I did for Brazil's Ministry of Health — it isn't tied to any client, it's mine, under CriAugu." },
+      tags: ['Figma API', 'MCP', { pt: 'Autoria própria', en: 'Own authorship' }],
+      link: { href: 'https://www.figma.com/community/plugin/1607744231649281413/bi-bridge-design-to-data', label: { pt: 'Ver no Figma ↗', en: 'View on Figma ↗' } } },
+    { slug: 'handex', eyebrow: { pt: 'Fóton · Caixa Econômica Federal', en: 'Fóton · Caixa Econômica Federal' }, title: 'Handex — Handoff Express',
+      desc: { pt: 'Plugin Figma para o Design System Corporativo da Caixa que automatiza o handoff de design para desenvolvimento: escaneia tokens de UI e os compara automaticamente contra as bibliotecas oficiais do design system, anota specs e medidas direto no canvas, mapeia fluxos de tela e gera uma ficha técnica completa com declaração de conformidade — publicado na Figma Community e em uso ativo pelo time.',
+        en: "Figma plugin for Caixa's Corporate Design System that automates design-to-dev handoff: scans UI tokens and auto-compares them against the official design system libraries, annotates specs and measurements directly on the canvas, maps screen flows, and generates a full technical spec sheet with a compliance statement — published on Figma Community and in active use by the team." },
+      tags: ['Figma API', { pt: 'Design System', en: 'Design System' }, { pt: 'Em produção', en: 'In production' }] },
+    { slug: 'prisma', eyebrow: { pt: 'Fóton · Caixa Econômica Federal', en: 'Fóton · Caixa Econômica Federal' }, title: 'Prisma',
+      desc: { pt: 'Plugin Figma para auditar a maturidade do processo de UX por trás de um produto — não só o protótipo, mas as evidências de descoberta, definição, ideação e validação, além de aderência a design system e acessibilidade. Em desenvolvimento ativo, com múltiplos agentes de IA orquestrados avaliando cada dimensão.',
+        en: 'Figma plugin that audits the maturity of the UX process behind a product — not just the prototype, but the evidence of discovery, definition, ideation and validation, plus design system and accessibility adherence. Actively in development, with multiple orchestrated AI agents assessing each dimension.' },
+      tags: [{ pt: 'UX Ops', en: 'UX Ops' }, { pt: 'Em desenvolvimento', en: 'In development' }] },
+    { slug: 'responsivux', eyebrow: { pt: 'Fóton · Caixa Econômica Federal', en: 'Fóton · Caixa Econômica Federal' }, title: 'ResponsivUX',
+      desc: { pt: 'Plugin Figma que gera layouts responsivos automaticamente em múltiplos breakpoints (768px a 3840px), com Auto Layout responsivo e constraints inteligentes aplicadas a partir de um único frame selecionado — integrado à identidade visual do Design System da Caixa.',
+        en: "Figma plugin that auto-generates responsive layouts across multiple breakpoints (768px to 3840px), with responsive Auto Layout and smart constraints applied from a single selected frame — integrated with Caixa's Design System visual identity." },
+      tags: ['Figma API', { pt: 'Layout responsivo', en: 'Responsive layout' }] },
+    { slug: 'plataforma-brasil', eyebrow: { pt: 'Governança pública', en: 'Public governance' }, title: 'Plataforma Brasil',
+      desc: { pt: 'Sistema nacional de governança regulatória de pesquisa em saúde. Liderei a virada de uma interface de navegabilidade complexa para um redesign orientado a jornada — discovery, arquitetura de informação, prototipação e testes de usabilidade, em conformidade com Gov.BR Design System (eMAG/WCAG).',
+        en: 'National system for research governance in health. I led the shift from a hard-to-navigate interface to a journey-driven redesign — discovery, information architecture, prototyping and usability testing, compliant with the Gov.BR Design System (eMAG/WCAG).' },
+      tags: [{ pt: 'UX Research', en: 'UX Research' }, { pt: 'Design System', en: 'Design System' }, { pt: 'Acessibilidade', en: 'Accessibility' }] },
+    { slug: 'bi-style-guide', eyebrow: { pt: 'Design system em BI', en: 'BI design system' }, title: { pt: 'Guia de Estilo para Dashboards', en: 'Dashboard Style Guide' },
+      desc: { pt: 'Design system construído integralmente dentro do Power BI — não um manual estático, mas um sistema vivo: grid de 12 colunas navegável no próprio painel de camadas, componentes plug-and-play, tooltips com orientação de montagem e padrões de acessibilidade obrigatórios. Esse projeto foi a origem direta do BI Bridge.',
+        en: 'Design system built entirely inside Power BI — not a static manual, but a living system: a 12-column grid navigable in the layer panel itself, plug-and-play components, assembly-guidance tooltips, and mandatory accessibility standards. This project was the direct origin of BI Bridge.' },
+      tags: ['Power BI', { pt: 'Design System', en: 'Design System' }, { pt: 'Dataviz', en: 'Dataviz' }] },
+    { slug: 'ndti-backlog', eyebrow: { pt: 'Gestão de dados · Decit', en: 'Data management · Decit' }, title: { pt: 'NDTI — Painel de Gestão de Backlog', en: 'NDTI — Backlog Management Panel' },
+      desc: { pt: 'BI de gestão operacional real, acompanhando o backlog de entregas e as demandas registradas dos sistemas do Decit — aplicando na prática, com dados reais, o mesmo padrão visual criado no Guia de Estilo para Dashboards.',
+        en: 'Real operational-management BI, tracking the delivery backlog and registered demands for Decit\'s systems — applying, in practice and with real data, the same visual standard created in the Dashboard Style Guide.' },
+      tags: ['Power BI', { pt: 'Gestão de backlog', en: 'Backlog management' }] },
+    { slug: 'caixa', eyebrow: { pt: 'Canais físicos', en: 'Physical channels' }, title: 'Caixa Econômica Federal',
+      desc: { pt: 'Redesign integral do menu lateral e de uma tela única de crédito para pessoa física, dentro do Design System da Caixa. Discovery, wireframes multi-fidelidade, prototipação, testes de usabilidade e handoff completo para engenharia.',
+        en: "Full redesign of the side menu and a single unified credit screen for individual customers, within Caixa's Design System. Discovery, multi-fidelity wireframes, prototyping, usability testing and full handoff to engineering." },
+      tags: [{ pt: 'Prototipação', en: 'Prototyping' }, 'Handoff'] },
+    { slug: 'digibee', eyebrow: { pt: 'EdTech corporativa', en: 'Corporate EdTech' }, title: 'Digibee Academy',
+      desc: { pt: 'A Digibee é uma iPaaS (plataforma de integração em nuvem, low-code) usada por mais de 250 clientes corporativos. Como líder técnico, conduzi a gestão completa do LMS da sua Academy (WordPress + LearnDash): redesign de jornada, design instrucional, landing pages e análise de métricas de UX — a plataforma tornou-se um subproduto diferencial da empresa.',
+        en: 'Digibee is an iPaaS (cloud-based, low-code integration platform) used by more than 250 enterprise clients. As tech lead, I ran the full management of its Academy LMS (WordPress + LearnDash): journey redesign, instructional design, landing pages and UX metrics analysis — the platform became a key differentiator product for the company.' },
+      tags: [{ pt: 'Tech Lead', en: 'Tech Lead' }, 'LMS', { pt: 'UX Writing', en: 'UX Writing' }] },
+    { slug: 'mercado-mutuo', eyebrow: { pt: 'Conceito · UX Research', en: 'Concept · UX Research' }, title: 'Mercado Mútuo',
+      desc: { pt: 'Conceito de marketplace que converte custo de aluguel entre pares em desconto de compra futura. Antes de desenhar uma tela, validei a demanda com pesquisa quantitativa (55 respondentes): 95,6% demonstraram interesse na proposta e 78,3% confirmaram interesse específico no mecanismo de conversão aluguel→compra.',
+        en: 'Marketplace concept that converts peer-to-peer rental cost into a discount on a future purchase. Before designing a single screen, I validated demand with quantitative research (55 respondents): 95.6% showed interest in the proposal and 78.3% confirmed specific interest in the rental-to-purchase conversion mechanism.' },
+      tags: [{ pt: 'Pesquisa quantitativa', en: 'Quantitative research' }, { pt: 'Validação de demanda', en: 'Demand validation' }] },
+    { slug: 'sardinhia', eyebrow: { pt: 'Ferramenta própria · AI Building', en: 'Own tool · AI Building' }, title: 'SardinhIA',
+      desc: { pt: 'Assistente de IA construído para a AUVP, com um framework de QA próprio cobrindo 6 pilares de qualidade antes de qualquer resposta ir ao ar. Foi a inspiração inicial que me levou a pensar em IA aplicada a conhecimento — caminho que mais tarde, por outra via, resultou no Tusab.',
+        en: 'AI assistant built for AUVP, with a custom QA framework covering 6 quality pillars before any response goes live. It was the initial inspiration that got me thinking about AI applied to knowledge — a path that later, through a different route, led to Tusab.' },
+      tags: ['AUVP', { pt: 'Framework de QA', en: 'QA framework' }] },
+    { slug: 'tempus-meum', eyebrow: { pt: 'Identidade de marca', en: 'Brand identity' }, title: 'Tempus Meum',
+      desc: { pt: 'Identidade visual construída em torno de um conceito simbólico: uma releitura do Homem Vitruviano com a serpente Kundalini, ligando tempo, proporção e energia numa mesma figura — do conceito à arte final vetorizada.',
+        en: 'Visual identity built around a symbolic concept: a reinterpretation of Vitruvian Man with the Kundalini serpent, tying time, proportion and energy into a single figure — from concept to final vector art.' },
+      tags: [{ pt: 'Identidade visual', en: 'Visual identity' }, { pt: 'Conceito simbólico', en: 'Symbolic concept' }] }
+  ],
+  pessoais: [
+    { slug: 'acve', eyebrow: { pt: 'Projeto pessoal · Comunidade', en: 'Personal project · Community' }, title: 'ACVE — Guia de Aruanda',
+      desc: { pt: 'Site e sistema de gestão completos para uma comunidade de Umbanda (Ação Cristã Vovô Elvírio). Não é só um site institucional: por trás dele tem o Iroko, um sistema próprio com portal de membro e um painel interno que funciona como um ERP de comunidade — secretaria, tesouraria, estoque, cantina, calendário — além de um jornal editorial mensal publicado direto pela plataforma.',
+        en: "Full site and management system for an Umbanda community (Ação Cristã Vovô Elvírio). It's not just an institutional site: behind it is Iroko, a custom system with a member portal and an internal panel that works like a community ERP — front desk, treasury, inventory, canteen, calendar — plus a monthly editorial newspaper published straight from the platform." },
+      tags: ['Django', 'Wagtail CMS', { pt: 'Identidade visual', en: 'Visual identity' }] },
+    { slug: 'celuz', eyebrow: { pt: 'Projeto pessoal · Comunidade', en: 'Personal project · Community' }, title: 'CELUZ — Casa Espiritualista Luz de Ramatis',
+      desc: { pt: 'Site institucional e sistema interno para uma casa espírita (doutrina de Ramatis), construídos deliberadamente simples: tudo dentro de um único WordPress, com tema e plugin próprios, sem infraestrutura separada — decisão consciente para caber no orçamento e na realidade de manutenção de uma instituição pequena. Ainda em construção, com identidade visual (azul-noite e dourado) já fechada.',
+        en: 'Institutional site and internal system for a spiritist center (Ramatis doctrine), deliberately kept simple: everything inside a single WordPress, with a custom theme and plugin, no separate infrastructure — a conscious call to fit the budget and upkeep reality of a small institution. Still under construction, with the visual identity (night blue and gold) already locked in.' },
+      tags: ['WordPress', { pt: 'Plugin próprio', en: 'Custom plugin' }, { pt: 'Em construção', en: 'In progress' }] },
+    { slug: 'lisia', eyebrow: { pt: 'Projeto pessoal · Branding', en: 'Personal project · Branding' }, title: 'Lísia — Lettieri Saúde Integrativa',
+      desc: { pt: 'Identidade visual completa para a marca de uma terapeuta/osteopata: logo, paleta, papelaria, kit de redes sociais e até conteúdo educativo em vídeo sobre osteopatia, derivado da mesma peça em três formatos (vídeo, GIF e slide). O menor dos três projetos pessoais, mas o mais fechado — do conceito à aplicação em vestuário.',
+        en: 'Full visual identity for a therapist/osteopath\'s brand: logo, palette, stationery, social media kit, and even educational video content about osteopathy, repurposed from a single piece into three formats (video, GIF and slide deck). The smallest of the three personal projects, but the most self-contained — from concept to apparel application.' },
+      tags: [{ pt: 'Identidade visual', en: 'Visual identity' }, { pt: 'Redes sociais', en: 'Social media' }] }
+  ]
+};
+
+// Detalhamento end-to-end dos cases: conteúdo data-driven, renderizado na folha expandida.
+var CASE_DETAILS = {
+  tusab: {
+    eyebrow: { pt: 'Ferramenta própria · AI Building', en: 'Own tool · AI Building' },
+    narrative: [
+      { h: { pt: 'O problema', en: 'The problem' }, b: {
+        pt: 'Eu era aluno de um curso que publicava vídeos mais rápido do que eu conseguia assistir. Queria conseguir perguntar "o que esse professor já disse sobre X" e receber uma resposta com a fonte exata — não um resumo genérico, não uma alucinação.',
+        en: 'I was a student in a course that published videos faster than I could watch them. I wanted to be able to ask "what has this instructor already said about X" and get an answer with the exact source — not a generic summary, not a hallucination.' } },
+      { h: { pt: 'Três nomes até virar produto', en: 'Three names before it became a product' }, b: {
+        pt: 'O projeto nasceu como Brain\'IAC, depois virou Sebayt, e só então se firmou como Tusab. O SardinhIA é um projeto diferente — foi a inspiração inicial para pensar em IA aplicada a conhecimento, mas não faz parte dessa linha de renomeação; ele seguiu seu próprio caminho como ferramenta para a AUVP.',
+        en: 'The project started as Brain\'IAC, then became Sebayt, and only later settled as Tusab. SardinhIA is a separate project — it was the initial inspiration for thinking about AI applied to knowledge, but it isn\'t part of this renaming lineage; it went on its own path as a tool for AUVP.' } },
+      { h: { pt: 'Como foi construído', en: 'How it was built' }, b: {
+        pt: 'Stack: Electron para o app desktop, FastAPI no backend, RAG local combinando busca por palavra-chave (BM25) com reranking semântico — sem depender de um provedor de nuvem para indexar o conteúdo do usuário. Todo o desenvolvimento foi feito com Claude Code, incluindo uma pasta de agentes especializados — ferramentas de desenvolvimento (skills) que documentam decisões de arquitetura à medida que o código avança, não uma feature do produto final.',
+        en: 'Stack: Electron for the desktop app, FastAPI on the backend, local RAG combining keyword search (BM25) with semantic reranking — without depending on a cloud provider to index the user\'s content. All development was done with Claude Code, including a folder of specialized agents — development tooling (skills) that document architecture decisions as the code evolves, not a feature of the final product.' } },
+      { h: { pt: 'Onde está hoje', en: 'Where it stands today' }, b: {
+        pt: 'Em uso ativo e evolução contínua: o changelog do projeto vai de v0.1.0 a v1.0.53 em poucos meses, com indexação de YouTube, PDFs, áudio e repositórios de arquivos, chat com citação de fonte e um "modo estudo" que gera flashcards e resumos a partir do material indexado.',
+        en: 'In active use and continuous evolution: the project changelog runs from v0.1.0 to v1.0.53 in a few months, with YouTube, PDF, audio and file-repository indexing, source-cited chat, and a "study mode" that generates flashcards and summaries from the indexed material.' } }
+    ],
+    media: [
+      { src: 'case-media/tusab/home.png', caption: { pt: 'Tela inicial do Tusab, com branding do produto e ponto de entrada para indexar YouTube, PDFs e arquivos.', en: 'Tusab\'s home screen, with product branding and the entry point to index YouTube, PDFs and files.' } },
+      { src: 'case-media/tusab/chat-conversation.png', caption: { pt: 'Conversa com o assistente citando o trecho exato da fonte original — o diferencial central do produto.', en: 'Conversation with the assistant citing the exact excerpt from the original source — the product\'s core differentiator.' } },
+      { src: 'case-media/tusab/repository.png', caption: { pt: 'Repositório de arquivos indexados, mostrando a organização do conteúdo importado.', en: 'Repository of indexed files, showing how imported content is organized.' } },
+      { src: 'case-media/tusab/study-mode.png', caption: { pt: 'Modo de estudo: flashcards e resumos gerados automaticamente a partir do material indexado.', en: 'Study mode: flashcards and summaries auto-generated from the indexed material.' } }
+    ]
+  },
+  'bi-bridge': {
+    eyebrow: { pt: 'Ferramenta própria · Iniciativa pessoal', en: 'Own tool · Personal initiative' },
+    narrative: [
+      { h: { pt: 'O problema', en: 'The problem' }, b: {
+        pt: 'Depois de um projeto de dashboards que fiz para o Ministério da Saúde, vi de perto o quanto o handoff de Figma para BI é manual e impreciso: analistas perdem horas replicando cor e tipografia à mão, e specs de negócio (fórmulas DAX, queries SQL) se perdem em conversas informais de corredor.',
+        en: 'After a dashboard project I did for the Ministry of Health, I saw up close how manual and imprecise the Figma-to-BI handoff is: analysts lose hours manually replicating colors and typography, and business specs (DAX formulas, SQL queries) get lost in informal hallway conversations.' } },
+      { h: { pt: 'Uma história de várias versões', en: 'A story with several versions' }, b: {
+        pt: 'O plugin passou por pelo menos nove versões internas até chegar no formato publicado — um histórico de decisões guardado em documentos como "Análise de Versões" e "Qual Versão Usar", registrando inclusive um bug real de extração de fonte que levou várias rodadas para ser corrigido.',
+        en: 'The plugin went through at least nine internal versions before reaching its published form — a decision history kept in documents like "Version Analysis" and "Which Version to Use", including a real font-extraction bug that took several rounds to fix.' } },
+      { h: { pt: 'Como funciona', en: 'How it works' }, b: {
+        pt: 'Um briefing estratégico inicial (objetivo, público, KPIs) direciona a extração. O plugin gera um preview visual do layout, extrai os design tokens (cores, tipografia, espaçamento) direto do frame do Figma, e empacota tudo — incluindo a árvore semântica do layout — em um schema MCP, junto com um README de handoff com prompt pronto para IAs como Claude ou Cursor gerarem os componentes de dados.',
+        en: 'An initial strategic briefing (goal, audience, KPIs) guides the extraction. The plugin generates a visual layout preview, extracts design tokens (colors, typography, spacing) directly from the Figma frame, and packages it all — including the layout\'s semantic tree — into an MCP schema, along with a handoff README with a ready-to-use prompt for AIs like Claude or Cursor to generate the data components.' } },
+      { h: { pt: 'Onde está hoje', en: 'Where it stands today' }, b: {
+        pt: 'Publicado na Figma Community, sem vínculo com nenhum cliente — é meu, sob a CriAugu.',
+        en: 'Published on Figma Community, not tied to any client — it\'s mine, under CriAugu.' } }
+    ],
+    media: [
+      { src: 'case-media/bi-bridge/briefing-strategico.png', caption: { pt: 'Painel do plugin dentro do Figma na etapa de briefing estratégico: objetivo, público e KPIs do dashboard.', en: 'Plugin panel inside Figma at the strategic briefing step: dashboard goal, audience and KPIs.' } },
+      { src: 'case-media/bi-bridge/token-extraction-setup.png', caption: { pt: 'Configuração da extração: gerar um novo frame base ou mapear um frame existente para extrair os design tokens.', en: 'Extraction setup: generate a new base frame or map an existing one to extract the design tokens.' } },
+      { src: 'case-media/bi-bridge/layout-preview-capture.png', caption: { pt: 'Preview visual do layout gerado a partir do frame selecionado no Figma.', en: 'Visual layout preview generated from the frame selected in Figma.' } },
+      { src: 'case-media/bi-bridge/mcp-schema-output.png', caption: { pt: 'Schema MCP gerado pelo plugin, com os design tokens extraídos do dashboard.', en: 'MCP schema generated by the plugin, with the design tokens extracted from the dashboard.' } },
+      { src: 'case-media/bi-bridge/readme-handoff.png', caption: { pt: 'README de handoff gerado automaticamente, com prompt pronto para IA implementar o dashboard.', en: 'Auto-generated handoff README, with a ready-to-use prompt for AI to implement the dashboard.' } },
+      { src: 'case-media/bi-bridge/capa-branding-bi-bridge.png', caption: { pt: 'Marca e identidade visual do BI Bridge.', en: 'BI Bridge brand and visual identity.' } }
+    ]
+  },
+  handex: {
+    eyebrow: { pt: 'Fóton · Caixa Econômica Federal', en: 'Fóton · Caixa Econômica Federal' },
+    narrative: [
+      { h: { pt: 'O problema', en: 'The problem' }, b: {
+        pt: 'No Design System Corporativo da Caixa, o handoff de design para desenvolvimento dependia de checagem manual: comparar visualmente se os tokens usados numa tela batiam com a biblioteca oficial, anotar specs à mão, mapear fluxos numa ferramenta separada.',
+        en: 'In Caixa\'s Corporate Design System, the design-to-dev handoff relied on manual checking: visually comparing whether the tokens used in a screen matched the official library, annotating specs by hand, mapping flows in a separate tool.' } },
+      { h: { pt: 'O que foi construído', en: 'What was built' }, b: {
+        pt: 'Um plugin Figma (Handoff Express) que escaneia os tokens de UI usados no arquivo e os compara automaticamente contra as bibliotecas oficiais do design system, anota specs e medidas direto no canvas, mapeia o fluxo entre telas, verifica marcação de nível de título para conformidade com WCAG, e gera uma ficha técnica completa com declaração de conformidade — documentado com regras de negócio e modelo de dados próprios (BUSINESS_RULES.md, DATA_MODEL.md).',
+        en: 'A Figma plugin (Handoff Express) that scans the UI tokens used in the file and automatically compares them against the official design system libraries, annotates specs and measurements directly on the canvas, maps the flow between screens, checks heading-level markup for WCAG compliance, and generates a full technical spec sheet with a compliance statement — documented with its own business rules and data model (BUSINESS_RULES.md, DATA_MODEL.md).' } },
+      { h: { pt: 'Onde está hoje', en: 'Where it stands today' }, b: {
+        pt: 'Publicado na Figma Community e em uso ativo pelo time — com uma proposta de evolução já documentada para expandir sua governança de evidência de handoff.',
+        en: 'Published on Figma Community and in active use by the team — with a documented evolution proposal to expand its handoff-evidence governance.' } }
+    ],
+    media: [
+      { src: 'case-media/handex/01-painel-inicial-plugin.png', caption: { pt: 'Painel inicial do plugin: ferramentas de escaneamento de tokens, especificações, medidas e fluxos.', en: "Plugin's initial panel: tools for scanning tokens, specs, measurements and flows." } },
+      { src: 'case-media/handex/02-escanear-tokens-componentes.png', caption: { pt: 'Escaneamento de tokens em ação: componentes (botões, cores, espaçamentos) detectados automaticamente.', en: 'Token scanning in action: components (buttons, colors, spacing) detected automatically.' } },
+      { src: 'case-media/handex/03-anotar-especificacoes-canvas.png', caption: { pt: 'Especificação técnica anotada direto no canvas: altura, largura, alinhamento e padding.', en: 'Technical spec annotated directly on the canvas: height, width, alignment and padding.' } },
+      { src: 'case-media/handex/04-anotar-medidas-canvas.png', caption: { pt: 'Anotação automática de medidas sobre o protótipo, pronta para handoff ao desenvolvimento.', en: 'Automatic measurement annotation over the prototype, ready for handoff to development.' } },
+      { src: 'case-media/handex/05-acessibilidade-nivel-titulo.png', caption: { pt: 'Módulo de acessibilidade: marcação de nível de título (H1) para conformidade com WCAG.', en: 'Accessibility module: heading-level (H1) marking for WCAG compliance.' } },
+      { src: 'case-media/handex/06-mapeamento-fluxos-tela.png', caption: { pt: 'Mapeamento de fluxos de navegação entre telas, documentando a jornada do usuário.', en: 'Mapping of navigation flows between screens, documenting the user journey.' } },
+      { src: 'case-media/handex/handex-brand-system.png', caption: { pt: 'Branding do Handex: paleta, tipografia, grid de espaçamento e ícones exportáveis.', en: 'Handex branding: palette, typography, spacing grid and exportable icons.' } }
+    ]
+  },
+  prisma: {
+    eyebrow: { pt: 'Fóton · Caixa Econômica Federal', en: 'Fóton · Caixa Econômica Federal' },
+    narrative: [
+      { h: { pt: 'O problema', en: 'The problem' }, b: {
+        pt: 'Design systems e handoff resolvem a consistência visual, mas não respondem uma pergunta anterior: o processo de UX por trás daquele protótipo foi de fato rigoroso? Discovery aconteceu? Houve teste de usabilidade real, ou só uma prototipação apressada?',
+        en: 'Design systems and handoff solve visual consistency, but they don\'t answer an earlier question: was the UX process behind that prototype actually rigorous? Did discovery happen? Was there real usability testing, or just a rushed prototype?' } },
+      { h: { pt: 'O que está sendo construído', en: 'What\'s being built' }, b: {
+        pt: 'Um plugin Figma que audita a maturidade do processo de UX de um produto — não o protótipo em si, mas as evidências de descoberta, definição, ideação e validação, além de aderência a design system e acessibilidade — com múltiplos agentes de IA orquestrados, cada um avaliando uma dimensão diferente.',
+        en: 'A Figma plugin that audits the maturity of a product\'s UX process — not the prototype itself, but the evidence of discovery, definition, ideation and validation, plus design system and accessibility adherence — with multiple orchestrated AI agents, each assessing a different dimension.' } },
+      { h: { pt: 'Onde está hoje', en: 'Where it stands today' }, b: {
+        pt: 'Em desenvolvimento ativo — o projeto mais imaturo dos três plugins da Fóton, ainda documentando sua própria arquitetura à medida que evolui.',
+        en: 'Actively in development — the least mature of the three Fóton plugins, still documenting its own architecture as it evolves.' } }
+    ],
+    media: []
+  },
+  responsivux: {
+    eyebrow: { pt: 'Fóton · Caixa Econômica Federal', en: 'Fóton · Caixa Econômica Federal' },
+    narrative: [
+      { h: { pt: 'O problema', en: 'The problem' }, b: {
+        pt: 'Adaptar um layout para múltiplos breakpoints manualmente é repetitivo e sujeito a erro — replicar constraints, reordenar Auto Layout, ajustar espaçamento telinha por telinha.',
+        en: 'Manually adapting a layout across multiple breakpoints is repetitive and error-prone — replicating constraints, reordering Auto Layout, adjusting spacing screen by screen.' } },
+      { h: { pt: 'O que foi construído', en: 'What was built' }, b: {
+        pt: 'Um plugin Figma que gera layouts responsivos automaticamente em múltiplos breakpoints (768px a 3840px) a partir de um único frame selecionado, aplicando Auto Layout responsivo e constraints inteligentes, integrado à identidade visual do Design System da Caixa.',
+        en: 'A Figma plugin that auto-generates responsive layouts across multiple breakpoints (768px to 3840px) from a single selected frame, applying responsive Auto Layout and smart constraints, integrated with Caixa\'s Design System visual identity.' } }
+    ],
+    media: [
+      { src: 'case-media/responsivux/painel-plugin-breakpoints-disponiveis.png', caption: { pt: 'Painel do plugin com os breakpoints disponíveis (Tablet a Desk 4K) para geração responsiva.', en: 'Plugin panel with the available breakpoints (Tablet to 4K Desktop) for responsive generation.' } },
+      { src: 'case-media/responsivux/geracao-automatica-multiplos-breakpoints.png', caption: { pt: 'Geração automática de múltiplas versões responsivas a partir de um único frame.', en: 'Automatic generation of multiple responsive versions from a single frame.' } }
+    ]
+  },
+  'plataforma-brasil': {
+    eyebrow: { pt: 'Governança pública', en: 'Public governance' },
+    narrative: [
+      { h: { pt: 'O contexto', en: 'The context' }, b: {
+        pt: 'A Plataforma Brasil é o sistema nacional de governança regulatória de pesquisa em saúde, vinculado ao DECIT (Ministério da Saúde) — usado por pesquisadores, comitês de ética e instituições em todo o país para submeter e acompanhar projetos de pesquisa. A interface original tinha navegabilidade complexa, com jornadas pouco claras para quem não usava o sistema todo dia.',
+        en: 'Plataforma Brasil is the national governance system for health research, tied to DECIT (Ministry of Health) — used by researchers, ethics committees and institutions across the country to submit and track research projects. The original interface had complex navigation, with unclear journeys for anyone who wasn\'t a daily user.' } },
+      { h: { pt: 'O processo', en: 'The process' }, b: {
+        pt: 'Discovery, arquitetura de informação, prototipação e testes de usabilidade, liderando a virada para um redesign orientado a jornada — em conformidade com o Gov.BR Design System (eMAG/WCAG), o padrão de acessibilidade obrigatório para sistemas de governo.',
+        en: 'Discovery, information architecture, prototyping and usability testing, leading the shift to a journey-driven redesign — compliant with the Gov.BR Design System (eMAG/WCAG), the mandatory accessibility standard for government systems.' } },
+      { h: { pt: 'Evidência de processo relacionada', en: 'Related process evidence' }, b: {
+        pt: 'Parte do raciocínio de descoberta e definição de requisitos vem de material de processo do SINEP, um sistema irmão no mesmo contexto do DECIT: atas de reunião e uma matriz de formulário que passou por cinco versões (v1 a v5.4) documentando como um requisito de negócio complexo foi refinado até virar tela.',
+        en: 'Part of the discovery and requirements-definition reasoning comes from process material for SINEP, a sister system in the same DECIT context: meeting minutes and a form matrix that went through five versions (v1 to v5.4), documenting how a complex business requirement was refined into a screen.' } }
+    ],
+    media: [
+      { src: 'case-media/plataforma-brasil/estruturacao.png', caption: { pt: 'Capa do arquivo de Redesign & Melhorias, estruturando as fases do processo: descoberta, ideação, wireframe, protótipo.', en: 'Cover of the Redesign & Improvements file, structuring the process phases: discovery, ideation, wireframe, prototype.' } },
+      { src: 'case-media/plataforma-brasil/discovery-entrevistas-pesquisas.png', caption: { pt: 'Discovery: priorização de demandas por grupo (cadastro, tramitação, consultas) levantadas com usuários.', en: 'Discovery: demand prioritization by group (registration, processing, queries) gathered with users.' } },
+      { src: 'case-media/plataforma-brasil/wireframes.png', caption: { pt: 'Wireframe do formulário de cadastro de projeto, com fluxo de aprovação/reprovação.', en: 'Wireframe of the project registration form, with the approval/rejection flow.' } },
+      { src: 'case-media/plataforma-brasil/prototipacao.png', caption: { pt: 'Prototipação das telas de gestão de usuário: identificação, dados complementares, endereço e vínculo institucional.', en: 'Prototyping of user management screens: identification, additional data, address and institutional affiliation.' } },
+      { src: 'case-media/plataforma-brasil/entrega.png', caption: { pt: 'Tela entregue: listagem de usuários com dados mascarados na interface real, em conformidade com a LGPD.', en: 'Delivered screen: user listing with masked data in the real interface, LGPD-compliant.' } },
+      { src: 'case-media/plataforma-brasil/sinep-chat-colaborativo-ceps.png', caption: { pt: 'Chat colaborativo entre Comitês de Ética em projetos multicêntricos, no sistema irmão SINEP.', en: 'Collaborative chat between Ethics Committees on multi-site projects, in the sister system SINEP.' } }
+    ]
+  },
+  'bi-style-guide': {
+    eyebrow: { pt: 'Design system em BI', en: 'BI design system' },
+    narrative: [
+      { h: { pt: 'O problema', en: 'The problem' }, b: {
+        pt: 'Manuais de marca em PDF viram letra morta rápido — ninguém abre um PDF de 40 páginas no meio da montagem de um dashboard.',
+        en: 'Brand manuals in PDF form go stale fast — nobody opens a 40-page PDF in the middle of assembling a dashboard.' } },
+      { h: { pt: 'O que foi construído', en: 'What was built' }, b: {
+        pt: 'Um design system vivo, construído inteiramente dentro do Power BI: grid de 12 colunas navegável no próprio painel de camadas, componentes plug-and-play prontos para copiar, tooltips com orientação de montagem e padrões de acessibilidade obrigatórios embutidos no próprio arquivo.',
+        en: 'A living design system, built entirely inside Power BI: a 12-column grid navigable right in the layer panel, ready-to-copy plug-and-play components, assembly-guidance tooltips, and mandatory accessibility standards embedded in the file itself.' } },
+      { h: { pt: 'Onde está hoje', en: 'Where it stands today' }, b: {
+        pt: 'Esse projeto foi a origem direta do BI Bridge — a mesma dor de handoff entre design e dados, primeiro resolvida manualmente dentro do Power BI, depois automatizada como plugin.',
+        en: 'This project was the direct origin of BI Bridge — the same design-to-data handoff pain, first solved manually inside Power BI, then automated as a plugin.' } }
+    ],
+    media: [
+      { src: 'case-media/ndti-backlog/painel-backlog-modulos.png', caption: { pt: 'Aplicação real do padrão: painel de backlog do NDTI, com entregas e status de desenvolvimento por módulo.', en: 'Real-world application of the standard: NDTI backlog panel, with deliveries and development status by module.' } },
+      { src: 'case-media/bi-style-guide/guia-dashboards-01-estrutura-grid.png', caption: { pt: 'Estrutura de página e grid system (colunas, margens, gutter) para padronizar os dashboards do NDTI.', en: 'Page structure and grid system (columns, margins, gutter) to standardize NDTI dashboards.' } },
+      { src: 'case-media/bi-style-guide/guia-dashboards-02-mockup-aplicado.png', caption: { pt: 'Mockup aplicando o padrão de menu lateral e grid a um dashboard real do ecossistema Decit.', en: 'Mockup applying the side-menu and grid pattern to a real dashboard in the Decit ecosystem.' } },
+      { src: 'case-media/bi-style-guide/guia-dashboards-03-componentes-tipografia-botoes.png', caption: { pt: 'Especificação de blocos, tipografia e hierarquia de botões baseada no Design System Gov.br.', en: 'Specification of blocks, typography and button hierarchy based on the Gov.br Design System.' } },
+      { src: 'case-media/bi-style-guide/guia-dashboards-04-iconografia-cores.png', caption: { pt: 'Diretrizes de iconografia (Material Design) e início da paleta de cores institucional.', en: 'Iconography guidelines (Material Design) and the start of the institutional color palette.' } },
+      { src: 'case-media/bi-style-guide/guia-dashboards-05-paleta-cores.png', caption: { pt: 'Paleta de cores completa com justificativa de acessibilidade e contraste.', en: 'Full color palette with accessibility and contrast rationale.' } }
+    ]
+  },
+  'ndti-backlog': {
+    eyebrow: { pt: 'Gestão de dados · Decit', en: 'Data management · Decit' },
+    narrative: [
+      { h: { pt: 'O que é', en: 'What it is' }, b: {
+        pt: 'Um BI de gestão operacional real, construído em Power BI, que acompanha o backlog de entregas e as demandas registradas dos sistemas ligados ao Decit — quantas funcionalidades foram planejadas, quantas foram desenvolvidas, e o gasto estimado por demanda.',
+        en: 'A real operational-management BI, built in Power BI, tracking the delivery backlog and registered demands for systems tied to Decit — how many features were planned, how many were built, and the estimated cost per demand.' } },
+      { h: { pt: 'O design system em uso real', en: 'The design system in real use' }, b: {
+        pt: 'Diferente do Guia de Estilo (que é o template/padrão em si), este painel é a prova de que o padrão funciona com dados reais: mesmo grid, mesmo cabeçalho, mesma paleta — aplicados a um caso de uso operacional do dia a dia da equipe.',
+        en: 'Unlike the Style Guide (which is the template/standard itself), this panel is proof that the standard holds up with real data: same grid, same header, same palette — applied to the team\'s day-to-day operational use case.' } },
+      { h: { pt: 'O que ele mostra', en: 'What it shows' }, b: {
+        pt: 'Duas bases: Backlog (entregas por período, status de documentação e desenvolvimento por módulo — API, Apoio, Biobanco, Gestão CEP, Projeto) e Redmine (demandas registradas, status e gasto estimado agregado por situação).',
+        en: 'Two bases: Backlog (deliveries by period, documentation and development status by module — API, Support, Biobank, CEP Management, Project) and Redmine (registered demands, status, and estimated cost aggregated by situation).' } }
+    ],
+    media: [
+      { src: 'case-media/ndti-backlog/painel-backlog-modulos.png', caption: { pt: 'Base Backlog: entregas por período e status de documentação/desenvolvimento por módulo.', en: 'Backlog base: deliveries by period and documentation/development status by module.' } },
+      { src: 'case-media/ndti-backlog/painel-redmine-gasto-estimado.png', caption: { pt: 'Base Redmine: demandas registradas, status e gasto estimado agregado por situação.', en: 'Redmine base: registered demands, status, and estimated cost aggregated by situation.' } }
+    ]
+  },
+  caixa: {
+    eyebrow: { pt: 'Canais físicos', en: 'Physical channels' },
+    narrative: [
+      { h: { pt: 'O escopo', en: 'The scope' }, b: {
+        pt: 'Redesign integral do menu lateral e de uma tela única de crédito para pessoa física, dentro do Design System da Caixa, incluindo um teste de usabilidade real medindo o desempenho da navegação por menu.',
+        en: 'Full redesign of the side menu and a single unified credit screen for individual customers, within Caixa\'s Design System, including a real usability test measuring side-menu navigation performance.' } },
+      { h: { pt: 'O processo', en: 'The process' }, b: {
+        pt: 'Discovery, wireframes multi-fidelidade, prototipação, testes de usabilidade e handoff completo para engenharia — o mesmo processo aplicado em produtos próprios, aqui em escala institucional.',
+        en: 'Discovery, multi-fidelity wireframes, prototyping, usability testing and full handoff to engineering — the same process applied to my own products, here at institutional scale.' } },
+      { h: { pt: 'Componentização', en: 'Componentization' }, b: {
+        pt: 'O menu lateral e os modais de cadastro/consulta foram organizados numa biblioteca de componentes reutilizável, para que outras equipes do design system pudessem reaproveitar o mesmo padrão sem recriar do zero.',
+        en: 'The side menu and the registration/query modals were organized into a reusable component library, so other design-system teams could reuse the same pattern instead of rebuilding it from scratch.' } }
+    ],
+    media: [
+      { src: 'case-media/caixa/discovery-entrevistas-pesquisas.png', caption: { pt: 'Discovery: entrevistas e pesquisas organizadas por regional, mapeando prioridades de cadastro, tramitação e avaliação de risco.', en: 'Discovery: interviews and research organized by region, mapping priorities for registration, processing and risk assessment.' } },
+      { src: 'case-media/caixa/wireframes.png', caption: { pt: 'Wireframes da jornada integrada de crédito, comparando qualificação do cliente e avaliação de risco lado a lado.', en: 'Wireframes of the integrated credit journey, comparing customer qualification and risk assessment side by side.' } },
+      { src: 'case-media/caixa/prototipacao.png', caption: { pt: 'Protótipo de alta fidelidade das abas de Cartão de Crédito, Empréstimo Pessoal e Cheque Especial.', en: 'High-fidelity prototype of the Credit Card, Personal Loan and Overdraft tabs.' } },
+      { src: 'case-media/caixa/componentizacao.png', caption: { pt: 'Biblioteca de componentes do menu lateral e modais de cadastro/consulta, organizada para reuso no design system.', en: 'Component library for the side menu and registration/query modals, organized for design-system reuse.' } },
+      { src: 'case-media/caixa/entrega.png', caption: { pt: 'Tela final entregue: Painel de Crédito PF com o menu lateral redesenhado e qualificação do cliente.', en: 'Final delivered screen: individual Credit Panel with the redesigned side menu and customer qualification.' } },
+      { src: 'case-media/caixa/plataforma-caixa-menu-lateral.png', caption: { pt: 'Teste de usabilidade do menu lateral redesenhado, com indicadores e fila de atendimento.', en: 'Usability test of the redesigned side menu, with indicators and service queue.' } }
+    ]
+  },
+  digibee: {
+    eyebrow: { pt: 'EdTech corporativa', en: 'Corporate EdTech' },
+    narrative: [
+      { h: { pt: 'O contexto', en: 'The context' }, b: {
+        pt: 'A Digibee é uma iPaaS (Integration Platform as a Service): uma plataforma em nuvem, low-code, que conecta sistemas, aplicações e processos diferentes numa arquitetura de integração organizada — usada por mais de 250 clientes corporativos nas Américas.',
+        en: 'Digibee is an iPaaS (Integration Platform as a Service): a cloud-based, low-code platform that connects different systems, applications and processes into an organized integration architecture — used by more than 250 enterprise clients across the Americas.' } },
+      { h: { pt: 'O papel estratégico da Academy', en: "The Academy's strategic role" }, b: {
+        pt: 'A Academy existe para levar clientes e parceiros à autossuficiência na plataforma — quanto menos dependentes de suporte, mais rápido eles ativam valor. Isso é feito com trilhas guiadas por instrutor (Foundations, um bootcamp intensivo de 5 dias para desenvolvedores), trilhas de autoaprendizagem no próprio ritmo, e uma certificação técnica opcional.',
+        en: 'The Academy exists to make clients and partners self-sufficient on the platform — the less dependent on support, the faster they activate value. This is done through instructor-led tracks (Foundations, plus an intensive 5-day developer bootcamp), self-paced learning tracks, and an optional technical certification.' } },
+      { h: { pt: 'O escopo', en: 'The scope' }, b: {
+        pt: 'Como líder técnico, conduzi a gestão completa do LMS da Academy (WordPress + LearnDash): redesign de jornada, design instrucional, landing pages e análise de métricas de UX.',
+        en: 'As tech lead, I ran the full management of the Academy\'s LMS (WordPress + LearnDash): journey redesign, instructional design, landing pages and UX metrics analysis.' } },
+      { h: { pt: 'Onde está hoje', en: 'Where it stands today' }, b: {
+        pt: 'A plataforma se tornou um subproduto diferencial da empresa, com dashboards estratégicos próprios acompanhando engajamento e conclusão de cursos, além de um assistente de IA embutido no portal para responder dúvidas de clientes em tempo real.',
+        en: 'The platform became a key differentiator product for the company, with its own strategic dashboards tracking engagement and course completion, plus an AI assistant embedded in the portal to answer client questions in real time.' } }
+    ],
+    media: [
+      { src: 'case-media/digibee/academy-pagina-inicial-cursos.png', caption: { pt: 'Página inicial da Digibee Academy, com trilha de aprendizagem e cursos em destaque.', en: 'Digibee Academy home page, with the learning track and featured courses.' } },
+      { src: 'case-media/digibee/academy-trilha-cursos-avancados.png', caption: { pt: 'Trilha completa de cursos, workshops ao vivo e certificação.', en: 'Full track of courses, live workshops and certification.' } },
+      { src: 'case-media/digibee/dashboard-estrategico-participantes-conclusao.png', caption: { pt: 'Dashboard estratégico de participantes por empresa/país e taxa de conclusão de cursos.', en: 'Strategic dashboard of participants by company/country and course completion rate.' } },
+      { src: 'case-media/digibee/dashboard-metricas-interacoes-ia.png', caption: { pt: 'Painel de métricas de interação com o assistente de IA da Digibee.', en: 'Metrics panel for interactions with Digibee\'s AI assistant.' } },
+      { src: 'case-media/digibee/landing-page-guidebook.png', caption: { pt: 'Landing page de conversão para download do guidebook da Digibee Academy.', en: 'Conversion landing page for downloading the Digibee Academy guidebook.' } }
+    ]
+  },
+  'mercado-mutuo': {
+    eyebrow: { pt: 'Conceito · UX Research', en: 'Concept · UX Research' },
+    narrative: [
+      { h: { pt: 'A ideia', en: 'The idea' }, b: {
+        pt: 'Um marketplace entre pares onde o valor pago em aluguel de um produto não é apenas custo perdido: uma parte dele vira desconto acumulado caso a pessoa decida comprar aquele mesmo item depois — "testar antes de comprar" com incentivo embutido.',
+        en: 'A peer-to-peer marketplace where the money paid to rent a product isn\'t just sunk cost: part of it becomes an accumulated discount if the person later decides to buy that same item — "try before you buy" with a built-in incentive.' } },
+      { h: { pt: 'Validar antes de desenhar', en: 'Validating before designing' }, b: {
+        pt: 'Antes de qualquer wireframe, rodei uma pesquisa quantitativa com 55 respondentes para checar se a dor era real. Resultado: 95,6% demonstraram interesse na proposta geral, e a motivação mais citada para alugar entre pares foi "testar antes de comprar" (56,5%), muito à frente de "necessidade pontual" (21,7%) — validando a lógica central do conceito.',
+        en: 'Before any wireframe, I ran quantitative research with 55 respondents to check whether the pain was real. Result: 95.6% showed interest in the overall proposal, and the most-cited motivation for peer rental was "trying before buying" (56.5%), well ahead of "one-off need" (21.7%) — validating the concept\'s core logic.' } },
+      { h: { pt: 'O mecanismo específico', en: 'The specific mechanism' }, b: {
+        pt: '78,3% dos respondentes confirmaram interesse específico no mecanismo de conversão de aluguel em desconto de compra — o diferencial da proposta em relação a um marketplace de aluguel comum.',
+        en: '78.3% of respondents confirmed specific interest in the rental-to-purchase-discount conversion mechanism — the proposal\'s differentiator compared to a plain rental marketplace.' } },
+      { h: { pt: 'Onde está hoje', en: 'Where it stands today' }, b: {
+        pt: 'Em estágio de conceito validado por pesquisa, com proposta consolidada documentada — a próxima etapa seria prototipação, ainda não iniciada.',
+        en: 'At the stage of a research-validated concept, with a consolidated proposal already documented — the next step would be prototyping, not yet started.' } }
+    ],
+    media: [
+      { src: 'case-media/mercado-mutuo/Grafico1.png', caption: { pt: '95,6% dos respondentes demonstraram interesse na proposta do Mercado Mútuo.', en: '95.6% of respondents showed interest in the Mercado Mútuo proposal.' } },
+      { src: 'case-media/mercado-mutuo/Grafico2.png', caption: { pt: '"Testar antes de comprar" é a motivação predominante para alugar entre pares (56,5%).', en: '"Trying before buying" is the leading motivation for peer rental (56.5%).' } },
+      { src: 'case-media/mercado-mutuo/Grafico5.png', caption: { pt: '78,3% confirmaram interesse no mecanismo de conversão de aluguel em desconto de compra.', en: '78.3% confirmed interest in the rental-to-purchase-discount conversion mechanism.' } }
+    ]
+  },
+  sardinhia: {
+    eyebrow: { pt: 'Ferramenta própria · AI Building', en: 'Own tool · AI Building' },
+    narrative: [
+      { h: { pt: 'O que é', en: 'What it is' }, b: {
+        pt: 'Um assistente de IA construído para a AUVP — meu primeiro projeto sério aplicando IA a uma base de conhecimento real, e a inspiração inicial que mais tarde, por um caminho totalmente separado (Brain\'IAC → Sebayt), resultou no Tusab.',
+        en: 'An AI assistant built for AUVP — my first serious project applying AI to a real knowledge base, and the initial inspiration that later, through a completely separate path (Brain\'IAC → Sebayt), led to Tusab.' } },
+      { h: { pt: 'Qualidade como processo, não como esperança', en: 'Quality as a process, not a hope' }, b: {
+        pt: 'Construí um framework de QA próprio para o projeto, cobrindo 6 pilares de qualidade — a resposta da IA só é considerada confiável se passa por essa checagem, não só por parecer coerente.',
+        en: 'I built a custom QA framework for the project, covering 6 quality pillars — the AI\'s answer is only considered trustworthy if it clears that check, not just because it sounds coherent.' } }
+    ],
+    media: [
+      { src: 'case-media/sardinhia/sardinhia-mascote-demo.gif', caption: { pt: 'Animação da mascote $ardinh\'IA, usada na apresentação do assistente.', en: 'Animation of the $ardinh\'IA mascot, used in the assistant\'s presentation.' } }
+    ]
+  },
+  'tempus-meum': {
+    eyebrow: { pt: 'Identidade de marca', en: 'Brand identity' },
+    narrative: [
+      { h: { pt: 'O conceito', en: 'The concept' }, b: {
+        pt: 'Tempus Meum ("meu tempo", em latim) pedia uma imagem que unisse tempo, proporção e energia — cheguei numa releitura do Homem Vitruviano de Da Vinci com a serpente Kundalini entrelaçada na figura, ligando a ideia clássica de proporção humana à ideia de energia interior.',
+        en: '"Tempus Meum" ("my time", in Latin) called for an image that tied together time, proportion and energy — I arrived at a reinterpretation of Da Vinci\'s Vitruvian Man with the Kundalini serpent woven into the figure, linking the classical idea of human proportion to the idea of inner energy.' } },
+      { h: { pt: 'Do conceito à marca', en: 'From concept to brand' }, b: {
+        pt: 'A arte-conceito foi refinada até virar logotipo final, vetorizado em múltiplos formatos (PNG, SVG, PDF) para uso em qualquer aplicação.',
+        en: 'The concept art was refined into a final logo, vectorized in multiple formats (PNG, SVG, PDF) for use across any application.' } }
+    ],
+    media: [
+      { src: 'case-media/tempus-meum/Vitruviano-Kundalini.png', caption: { pt: 'Arte-conceito: o Homem Vitruviano com a serpente Kundalini e pontos de energia ao longo da coluna.', en: 'Concept art: Vitruvian Man with the Kundalini serpent and energy points along the spine.' } },
+      { src: 'case-media/tempus-meum/Vitruviano-SemFundo.png', caption: { pt: 'Base geométrica clássica de proporções, sem a serpente, em fundo transparente.', en: 'Classical geometric proportion base, without the serpent, on a transparent background.' } },
+      { src: 'case-media/tempus-meum/logotipo-tempus-meum.png', caption: { pt: 'Logotipo final da marca Tempus Meum.', en: 'Final Tempus Meum brand logo.' } }
+    ]
+  },
+  acve: {
+    eyebrow: { pt: 'Projeto pessoal · Comunidade', en: 'Personal project · Community' },
+    narrative: [
+      { h: { pt: 'O que é', en: 'What it is' }, b: {
+        pt: 'ACVE é uma comunidade de Umbanda (Ação Cristã Vovô Elvírio, editorialmente publicada como "Guia de Aruanda"). É o mais robusto dos meus projetos pessoais: não é só um site, é uma plataforma completa chamada Iroko, com CMS, portal de membro logado e um painel interno que funciona como um ERP de gestão comunitária.',
+        en: 'ACVE is an Umbanda community (Ação Cristã Vovô Elvírio, editorially published as "Guia de Aruanda"). It\'s the most robust of my personal projects: not just a site, but a full platform called Iroko, with a CMS, a logged-in member portal, and an internal panel that works like a community-management ERP.' } },
+      { h: { pt: 'Como foi construído', en: 'How it was built' }, b: {
+        pt: 'Django com Wagtail CMS, autenticação com MFA, geração de PDF, e três zonas de acesso: área pública, portal do membro (extrato financeiro, recibos) e painel interno (secretaria, tesouraria, estoque, cantina, bazar, calendário). Recentemente passou por adequação a WCAG 2.1 AA nas três áreas, com uma suíte de 131 testes automatizados.',
+        en: 'Django with Wagtail CMS, MFA authentication, PDF generation, and three access zones: public area, member portal (financial statement, receipts) and internal panel (front desk, treasury, inventory, canteen, bazaar, calendar). It recently went through WCAG 2.1 AA compliance work across all three areas, backed by a suite of 131 automated tests.' } },
+      { h: { pt: 'Conteúdo vivo', en: 'Living content' }, b: {
+        pt: 'O sistema publica um jornal editorial mensal ("Estrela Guia de Aruanda") direto pela plataforma, com edições numeradas e colunistas — evidência de que é conteúdo em produção contínua, não um protótipo único.',
+        en: 'The system publishes a monthly editorial newspaper ("Estrela Guia de Aruanda") straight from the platform, with numbered issues and columnists — evidence that it\'s content in continuous production, not a one-off prototype.' } },
+      { h: { pt: 'Identidade visual', en: 'Visual identity' }, b: {
+        pt: 'Paleta roxo-espiritual como cor principal, com dourado, verde, vermelho e azul como secundárias, vinculadas aos orixás/guias — com um customizador de tema no próprio site que permite trocar a paleta em tempo real.',
+        en: 'A "spiritual purple" palette as the primary color, with gold, green, red and blue as secondaries tied to the orixás/guides — with an in-site theme customizer that lets visitors swap the palette in real time.' } }
+    ],
+    media: [
+      { src: 'case-media/acve/screenshot-home.png', caption: { pt: 'Home do site em produção, com o cabeçalho e os destaques de artigos do jornal.', en: 'Live site home, with the header and the newspaper\'s featured articles.' } },
+      { src: 'case-media/acve/logo-acve-principal.png', caption: { pt: 'Logo principal da ACVE (Ação Cristã Vovô Elvírio).', en: 'ACVE\'s main logo (Ação Cristã Vovô Elvírio).' } },
+      { src: 'case-media/acve/logo-acve-ponto-riscado.png', caption: { pt: 'Variante "ponto riscado" do símbolo, remetendo à grafia ritual de Umbanda.', en: '"Ponto riscado" variant of the symbol, referencing the ritual Umbanda script.' } }
+    ]
+  },
+  celuz: {
+    eyebrow: { pt: 'Projeto pessoal · Comunidade', en: 'Personal project · Community' },
+    narrative: [
+      { h: { pt: 'O que é', en: 'What it is' }, b: {
+        pt: 'CELUZ é uma casa espírita (doutrina de Ramatis). Ao contrário do ACVE, aqui a arquitetura foi deliberadamente mais simples: um único WordPress cobrindo site público e sistema interno de gestão — tudo como conteúdo, plugins e papéis de usuário dentro do mesmo WordPress, sem aplicação separada.',
+        en: 'CELUZ is a spiritist center (Ramatis doctrine). Unlike ACVE, the architecture here was deliberately kept simple: a single WordPress install covering both the public site and the internal management system — everything as content, plugins and user roles within the same WordPress, no separate application.' } },
+      { h: { pt: 'Por que essa escolha', en: 'Why this choice' }, b: {
+        pt: 'Hospedagem compartilhada, orçamento pequeno e uma instituição sem equipe técnica própria pedem simplicidade auditável, não arquitetura elegante. Um plugin próprio (sem dependências externas via Composer) cobre 8 tipos de conteúdo — ensinamentos, atendimentos, agenda, biblioteca, orações, projeto social, FAQ e galeria — com papéis diferenciados (tesouraria, coordenação de escalas, bibliotecário).',
+        en: 'Shared hosting, a small budget, and an institution with no dedicated tech team call for auditable simplicity, not elegant architecture. A custom plugin (no external Composer dependencies) covers 8 content types — teachings, spiritual sessions, agenda, library, prayers, social project, FAQ and gallery — with distinct roles (treasury, shift coordination, librarian).' } },
+      { h: { pt: 'Onde está hoje', en: 'Where it stands today' }, b: {
+        pt: 'Ainda em construção — a identidade visual (azul-noite e dourado, tipografia Fraunces + Inter, já validada em contraste WCAG AA) está fechada, mas o wordmark final (símbolo + nome por escrito) ainda não foi produzido. Prefiro nomear isso como um projeto em andamento a apresentá-lo como pronto.',
+        en: 'Still under construction — the visual identity (night blue and gold, Fraunces + Inter typography, already validated for WCAG AA contrast) is locked in, but the final wordmark (symbol + written name) hasn\'t been produced yet. I\'d rather call this a work in progress than present it as finished.' } }
+    ],
+    media: [
+      { src: 'case-media/celuz/logo-fundo-escuro.png', caption: { pt: 'Símbolo da CELUZ sobre fundo escuro.', en: 'CELUZ symbol on a dark background.' } },
+      { src: 'case-media/celuz/logo-fundo-translucido.png', caption: { pt: 'Símbolo da CELUZ em branco, versão translúcida para aplicações claras.', en: 'CELUZ symbol in white, translucent version for light applications.' } }
+    ]
+  },
+  lisia: {
+    eyebrow: { pt: 'Projeto pessoal · Branding', en: 'Personal project · Branding' },
+    narrative: [
+      { h: { pt: 'O que é', en: 'What it is' }, b: {
+        pt: 'Um trabalho de branding para Lísia Lettieri Vidal, terapeuta e osteopata, para sua marca "Lettieri Saúde Integrativa". O menor e mais autocontido dos meus projetos pessoais: puramente identidade visual e materiais de aplicação, sem componente de software.',
+        en: 'A branding project for Lísia Lettieri Vidal, a therapist and osteopath, for her brand "Lettieri Saúde Integrativa". The smallest and most self-contained of my personal projects: purely visual identity and applied materials, no software component.' } },
+      { h: { pt: 'O que foi entregue', en: 'What was delivered' }, b: {
+        pt: 'Logo em duas versões de cor, com variações sazonais (Outubro Rosa, Novembro Azul, Natal); papelaria aplicada (papel timbrado, voucher); kit completo de redes sociais (capas, perfil, stories); e uma peça sobre "O que é Osteopatia" produzida em três formatos a partir do mesmo conteúdo — vídeo, GIF e apresentação.',
+        en: 'Logo in two color versions, with seasonal variants (Breast Cancer Awareness, Blue November, Christmas); applied stationery (letterhead, voucher); a full social media kit (covers, profile, stories); and a piece on "What is Osteopathy" produced in three formats from the same content — video, GIF and slide deck.' } },
+      { h: { pt: 'Um conceito, múltiplos formatos', en: 'One concept, multiple formats' }, b: {
+        pt: 'O trabalho também inclui um vídeo institucional dedicado e fotos de aplicação da marca em vestuário — mostrando a marca em uso real, não só como arte final estática.',
+        en: 'The work also includes a dedicated institutional video and photos of the brand applied to apparel — showing the brand in real use, not just as static final art.' } }
+    ],
+    media: [
+      { src: 'case-media/lisia/logo-lettieri.png', caption: { pt: 'Logotipo Lettieri Saúde Integrativa.', en: 'Lettieri Saúde Integrativa logo.' } },
+      { src: 'case-media/lisia/paleta-cores.jpg', caption: { pt: 'Paleta de cores da marca.', en: 'Brand color palette.' } },
+      { src: 'case-media/lisia/aplicacao-papel-timbrado.png', caption: { pt: 'Aplicação da marca em papel timbrado.', en: 'Brand application on letterhead.' } },
+      { src: 'case-media/lisia/aplicacao-capa-redes-sociais.png', caption: { pt: 'Aplicação da marca em capa de rede social.', en: 'Brand application on a social media cover.' } }
+    ]
+  }
+};
+
+</script>
 <script>
 (function () {
   var root = document.documentElement;
@@ -862,6 +1324,7 @@
       lang = lang === 'pt' ? 'en' : 'pt';
       localStorage.setItem(LANG_KEY, lang);
       applyLang(lang);
+      if (typeof refreshOpenStacks === 'function') refreshOpenStacks();
     });
   }
 
@@ -905,6 +1368,190 @@
     prevBtn.addEventListener('click', function () { scrollByCard(-1); });
     nextBtn.addEventListener('click', function () { scrollByCard(1); });
   }
+
+  // Stacks of "sheets": each section renders as a deck, top card clickable,
+  // click expands it in place; closing sends it to the back of the deck.
+  var stacks = {}; // groupKey -> { order: [index...], expandedIndex: number|null }
+
+  function pick(field) {
+    if (field == null) return '';
+    if (typeof field === 'string') return field;
+    return field[lang] || field.pt || '';
+  }
+
+  function renderStackCollapsed(card, isTop) {
+    var tagsHtml = card.tags.map(function (t) { return '<span class="tag">' + pick(t) + '</span>'; }).join('');
+    var linkHtml = card.link ? '<a href="' + card.link.href + '" target="_blank" rel="noopener" style="font-size:12px;">' + pick(card.link.label) + '</a>' : '';
+    var expandHintHtml = isTop
+      ? '<div class="stack-expand-hint">' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>' +
+        '<span>' + (lang === 'pt' ? 'Clique para ver o case completo' : 'Click to see the full case') + '</span>' +
+        '</div>'
+      : '';
+    return (
+      '<div><div class="eyebrow" style="margin-bottom:8px;">' + pick(card.eyebrow) + '</div>' +
+      '<h3 style="font-size:21px;">' + pick(card.title) + '</h3></div>' +
+      '<p style="font-size:14.5px;">' + pick(card.desc) + '</p>' +
+      '<div style="display:flex; flex-direction:column; gap:8px; align-items:flex-start;">' + tagsHtml + linkHtml + '</div>' +
+      expandHintHtml
+    );
+  }
+
+  function renderStackExpanded(card) {
+    var data = CASE_DETAILS[card.slug];
+    var narrativeHtml = '';
+    var mediaHtml = '';
+    if (data) {
+      data.narrative.forEach(function (section) {
+        narrativeHtml += '<div class="stack-narrative-section"><h4>' + pick(section.h) + '</h4><p>' + pick(section.b) + '</p></div>';
+      });
+      if (data.media && data.media.length) {
+        mediaHtml += '<div class="stack-media-grid">';
+        data.media.forEach(function (item) {
+          var cap = item.caption ? pick(item.caption) : '';
+          mediaHtml += '<div class="stack-media-item"><img src="' + item.src + '" alt="" loading="lazy">' + (cap ? '<span>' + cap + '</span>' : '') + '</div>';
+        });
+        mediaHtml += '</div>';
+      }
+    }
+    return (
+      '<div class="stack-card-expanded-body">' +
+      '<div><div class="eyebrow" style="margin-bottom:8px;">' + pick(card.eyebrow) + '</div>' +
+      '<h3 style="font-size:24px;">' + pick(card.title) + '</h3></div>' +
+      narrativeHtml + mediaHtml +
+      '<button type="button" class="stack-card-close" data-stack-close data-pt="Fechar ↑" data-en="Close ↑">' + (lang === 'pt' ? 'Fechar ↑' : 'Close ↑') + '</button>' +
+      '</div>'
+    );
+  }
+
+  function renderStack(groupKey) {
+    var container = document.getElementById('stack-' + groupKey);
+    if (!container) return;
+    var cards = WORK_STACKS[groupKey];
+    var state = stacks[groupKey];
+    var stackEl = container.querySelector('.stack');
+    if (!stackEl) {
+      stackEl = document.createElement('div');
+      stackEl.className = 'stack';
+      container.appendChild(stackEl);
+      var progress = document.createElement('div');
+      progress.className = 'stack-progress';
+      container.appendChild(progress);
+      var prevBtn = document.createElement('button');
+      prevBtn.type = 'button';
+      prevBtn.className = 'stack-nav-btn stack-nav-prev';
+      prevBtn.setAttribute('aria-label', lang === 'pt' ? 'Projeto anterior' : 'Previous project');
+      prevBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>';
+      prevBtn.addEventListener('click', function () { navigateExpanded(groupKey, -1); });
+      var nextBtn = document.createElement('button');
+      nextBtn.type = 'button';
+      nextBtn.className = 'stack-nav-btn stack-nav-next';
+      nextBtn.setAttribute('aria-label', lang === 'pt' ? 'Próximo projeto' : 'Next project');
+      nextBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>';
+      nextBtn.addEventListener('click', function () { navigateExpanded(groupKey, 1); });
+      container.appendChild(prevBtn);
+      container.appendChild(nextBtn);
+    }
+    stackEl.innerHTML = '';
+    stackEl.classList.toggle('has-expanded', state.expandedIndex !== null);
+    container.classList.toggle('has-expanded', state.expandedIndex !== null);
+    var progressEl = container.querySelector('.stack-progress');
+    progressEl.innerHTML = '';
+
+    var MAX_VISIBLE_BACK = 4;
+    state.order.forEach(function (cardIndex, position) {
+      var card = cards[cardIndex];
+      var el = document.createElement('div');
+      var isTop = position === 0;
+      var isExpanded = state.expandedIndex === cardIndex;
+      el.className = 'stack-card' + (isTop || isExpanded ? '' : ' stack-card-back') + (isExpanded ? ' is-expanded' : '');
+      if (position > MAX_VISIBLE_BACK) el.classList.add('stack-card-hidden');
+      if (isExpanded) {
+        el.style.transform = 'none';
+        el.style.zIndex = 50;
+        el.innerHTML = renderStackExpanded(card);
+      } else {
+        var depth = Math.min(position, MAX_VISIBLE_BACK);
+        var rotate = depth === 0 ? 0 : (cardIndex % 2 === 0 ? 1 : -1) * (depth * 1.6);
+        var offsetY = depth * 8;
+        el.style.transform = 'translateY(' + offsetY + 'px) rotate(' + rotate + 'deg)';
+        el.style.zIndex = String(100 - depth);
+        el.style.opacity = String(Math.max(1 - depth * 0.12, 0.4));
+        el.innerHTML = renderStackCollapsed(card, isTop);
+        if (isTop) {
+          el.addEventListener('click', function () { expandTop(groupKey); });
+        }
+      }
+      stackEl.appendChild(el);
+    });
+
+    cards.forEach(function (_, i) {
+      var dot = document.createElement('span');
+      dot.className = 'stack-progress-dot' + (state.order[0] === i ? ' is-active' : '');
+      progressEl.appendChild(dot);
+    });
+
+    var closeBtn = stackEl.querySelector('[data-stack-close]');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function (e) {
+        e.stopPropagation();
+        e.currentTarget.blur();
+        collapseAndAdvance(groupKey);
+      });
+    }
+  }
+
+  function expandTop(groupKey) {
+    var state = stacks[groupKey];
+    state.expandedIndex = state.order[0];
+    renderStack(groupKey);
+  }
+
+  function collapseAndAdvance(groupKey) {
+    var container = document.getElementById('stack-' + groupKey);
+    if (document.activeElement && container && container.contains(document.activeElement)) {
+      document.activeElement.blur();
+    }
+    var state = stacks[groupKey];
+    var pos = state.order.indexOf(state.expandedIndex);
+    if (pos > 0) state.order = state.order.slice(pos).concat(state.order.slice(0, pos));
+    state.expandedIndex = null;
+    state.order.push(state.order.shift());
+    renderStack(groupKey);
+    if (container) {
+      var top = container.getBoundingClientRect().top + window.scrollY - 24;
+      window.scrollTo({ top: top, behavior: 'smooth' });
+    }
+  }
+
+  function navigateExpanded(groupKey, dir) {
+    var state = stacks[groupKey];
+    if (state.expandedIndex === null) {
+      // Collapsed: cycle which card sits on top of the deck.
+      if (dir > 0) {
+        state.order.push(state.order.shift());
+      } else {
+        state.order.unshift(state.order.pop());
+      }
+    } else {
+      var pos = state.order.indexOf(state.expandedIndex);
+      var nextPos = (pos + dir + state.order.length) % state.order.length;
+      state.expandedIndex = state.order[nextPos];
+    }
+    renderStack(groupKey);
+  }
+
+  Object.keys(WORK_STACKS).forEach(function (groupKey) {
+    var cards = WORK_STACKS[groupKey];
+    stacks[groupKey] = { order: cards.map(function (_, i) { return i; }), expandedIndex: null };
+    renderStack(groupKey);
+    var container = document.getElementById('stack-' + groupKey);
+    if (container) container.classList.add('is-ready');
+  });
+
+  window.refreshOpenStacks = function () {
+    Object.keys(stacks).forEach(function (groupKey) { renderStack(groupKey); });
+  };
 })();
 </script>
 
