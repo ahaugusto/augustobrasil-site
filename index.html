@@ -228,6 +228,37 @@
   .shot-placeholder svg { opacity: 0.5; }
   .shot-placeholder span { font-size: 12px; font-family: 'Barlow', monospace; }
 
+  /* Mini-gallery of discovery research shots */
+  .discovery-gallery { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .discovery-shot { display: flex; flex-direction: column; gap: 6px; }
+  .discovery-shot img {
+    width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    display: block;
+  }
+  .discovery-shot span {
+    font-size: 10.5px;
+    line-height: 1.3;
+    color: var(--ink-dim);
+    font-family: 'Barlow', monospace;
+  }
+  .discovery-shot.shot-placeholder-mini img { display: none; }
+  .discovery-shot.shot-placeholder-mini {
+    position: relative;
+  }
+  .discovery-shot.shot-placeholder-mini::before {
+    content: '';
+    display: block;
+    aspect-ratio: 4/3;
+    border-radius: 6px;
+    border: 1px dashed var(--line);
+    background: var(--bg-raised);
+  }
+
   /* Process carousel */
   .carousel-track {
     display: flex;
@@ -447,6 +478,58 @@
     color: var(--ink-dim);
     line-height: 1.4;
   }
+
+  /* Expandable images (lightbox) */
+  img[data-expandable] { cursor: zoom-in; }
+  .lightbox-scrim {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.82);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    z-index: 500;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .lightbox-scrim.is-open { opacity: 1; pointer-events: auto; }
+  .lightbox-scrim img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 6px;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,0.6);
+    cursor: zoom-out;
+  }
+  .lightbox-close {
+    position: fixed;
+    top: 24px;
+    right: 24px;
+    width: 44px; height: 44px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.4);
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 501;
+    transition: border-color 0.2s ease;
+  }
+  .lightbox-close:hover { border-color: #fff; }
+  .lightbox-caption {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 80vw;
+    text-align: center;
+    font-size: 13px;
+    color: rgba(255,255,255,0.75);
+    z-index: 501;
+  }
 </style>
 </head>
 <body>
@@ -661,9 +744,19 @@
           data-en="User research, interviews and desk research before any screen decision — in Tusab, it started with my own frustration as a course student; at Caixa and DECIT, with formal interviews and desk research.">
           Pesquisa com usuários, entrevistas e desk research antes de qualquer decisão de tela — no Tusab, isso começou com minha própria frustração como usuário de um curso; na Caixa e no DECIT, com entrevistas e desk research formais.
         </p>
-        <div class="shot-placeholder">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
-          <span data-pt="Print em breve" data-en="Screenshot coming soon">Print em breve</span>
+        <div class="discovery-gallery">
+          <div class="discovery-shot">
+            <img src="case-media/caixa/discovery-menu-lateral.png" alt="" data-expandable loading="lazy" onerror="this.closest('.discovery-shot').classList.add('shot-placeholder-mini')">
+            <span data-caption data-pt="Pesquisa — Menu Lateral (Caixa)" data-en="Research — Side Menu (Caixa)">Pesquisa — Menu Lateral (Caixa)</span>
+          </div>
+          <div class="discovery-shot">
+            <img src="case-media/handex/discovery-handex.png" alt="" data-expandable loading="lazy" onerror="this.closest('.discovery-shot').classList.add('shot-placeholder-mini')">
+            <span data-caption data-pt="Pesquisa — Handex" data-en="Research — Handex">Pesquisa — Handex</span>
+          </div>
+          <div class="discovery-shot">
+            <img src="case-media/plataforma-brasil/discovery-sinep.png" alt="" data-expandable loading="lazy" onerror="this.closest('.discovery-shot').classList.add('shot-placeholder-mini')">
+            <span data-caption data-pt="Pesquisa — Plataforma SINEP (DECIT)" data-en="Research — SINEP Platform (DECIT)">Pesquisa — Plataforma SINEP (DECIT)</span>
+          </div>
         </div>
       </div>
 
@@ -844,6 +937,15 @@
     <a href="https://criaugu.com" class="mono" style="font-size:12px; color:var(--ink-dim);" data-pt="← Voltar para CriAugu" data-en="← Back to CriAugu">← Voltar para CriAugu</a>
   </div>
 
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox-scrim" id="lightbox-scrim" role="dialog" aria-modal="true" aria-label="Imagem ampliada">
+  <button type="button" class="lightbox-close" id="lightbox-close" aria-label="Fechar">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></svg>
+  </button>
+  <img id="lightbox-img" src="" alt="">
+  <div class="lightbox-caption" id="lightbox-caption"></div>
 </div>
 
 <script>
@@ -1263,6 +1365,44 @@ var CASE_DETAILS = {
     document.querySelectorAll('[data-skillbar]').forEach(function (bar) { bar.classList.add('is-visible'); });
   }
 
+  // Lightbox: click any image marked data-expandable to view it full-size
+  var lightboxScrim = document.getElementById('lightbox-scrim');
+  var lightboxImg = document.getElementById('lightbox-img');
+  var lightboxCaption = document.getElementById('lightbox-caption');
+  var lightboxCloseBtn = document.getElementById('lightbox-close');
+  var lightboxLastFocused = null;
+
+  function openLightbox(img) {
+    lightboxImg.src = img.currentSrc || img.src;
+    lightboxImg.alt = img.alt || '';
+    var captionEl = img.closest('.stack-media-item, .discovery-shot');
+    var captionText = captionEl ? captionEl.querySelector('[data-caption]') : null;
+    lightboxCaption.textContent = captionText ? captionText.textContent : (img.alt || '');
+    lightboxLastFocused = img;
+    lightboxScrim.classList.add('is-open');
+    document.body.classList.add('modal-open');
+    lightboxCloseBtn.focus();
+  }
+  function closeLightbox() {
+    lightboxScrim.classList.remove('is-open');
+    document.body.classList.remove('modal-open');
+    lightboxImg.src = '';
+    if (lightboxLastFocused) lightboxLastFocused.focus();
+  }
+  if (lightboxScrim) {
+    document.addEventListener('click', function (e) {
+      var img = e.target.closest('img[data-expandable]');
+      if (img) openLightbox(img);
+    });
+    lightboxCloseBtn.addEventListener('click', closeLightbox);
+    lightboxScrim.addEventListener('click', function (e) {
+      if (e.target === lightboxScrim) closeLightbox();
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && lightboxScrim.classList.contains('is-open')) closeLightbox();
+    });
+  }
+
   // Carousel
   var track = document.getElementById('carousel-track');
   var prevBtn = document.getElementById('carousel-prev');
@@ -1318,7 +1458,7 @@ var CASE_DETAILS = {
         mediaHtml += '<div class="stack-media-grid">';
         data.media.forEach(function (item) {
           var cap = item.caption ? pick(item.caption) : '';
-          mediaHtml += '<div class="stack-media-item"><img src="' + item.src + '" alt="" loading="lazy">' + (cap ? '<span>' + cap + '</span>' : '') + '</div>';
+          mediaHtml += '<div class="stack-media-item"><img src="' + item.src + '" alt="" loading="lazy" data-expandable>' + (cap ? '<span data-caption>' + cap + '</span>' : '') + '</div>';
         });
         mediaHtml += '</div>';
       }
