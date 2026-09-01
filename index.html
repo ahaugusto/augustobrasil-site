@@ -386,11 +386,10 @@
     .stack-card { grid-template-columns: 1fr; padding: 28px; }
   }
 
-  /* Floating prev/next nav, shown while a sheet is expanded */
+  /* Floating prev/next nav, shown while a sheet is expanded — positioned relative to the stack itself, not the viewport */
+  .stack-wrap { position: relative; }
   .stack-nav-btn {
-    position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
+    position: absolute;
     width: 48px; height: 48px;
     border-radius: 999px;
     border: 1px solid var(--line);
@@ -407,16 +406,16 @@
     transition: border-color 0.2s ease, transform 0.2s ease;
   }
   .stack-nav-btn:hover { border-color: var(--accent); color: var(--accent); }
-  .stack-wrap.is-ready .stack-nav-btn { display: flex; }
-  .stack-nav-prev { left: max(16px, calc((100vw - 1280px) / 2 - 64px)); }
-  .stack-nav-next { right: max(16px, calc((100vw - 1280px) / 2 - 64px)); }
+  .stack-wrap.is-ready .stack-nav-btn { display: flex; align-items: center; justify-content: center; }
+  .stack-nav-prev { left: -64px; }
+  .stack-nav-next { right: -64px; }
   @media (max-width: 1180px) {
     .stack-nav-btn { width: 40px; height: 40px; }
-    .stack-nav-prev { left: 8px; }
-    .stack-nav-next { right: 8px; }
+    .stack-nav-prev { left: -8px; }
+    .stack-nav-next { right: -8px; }
   }
   @media (max-width: 700px) {
-    .stack-nav-btn { top: auto; bottom: 24px; transform: none; }
+    .stack-nav-btn { top: auto !important; bottom: 24px; position: fixed; }
     .stack-nav-prev { left: 24px; }
     .stack-nav-next { right: 24px; }
   }
@@ -464,7 +463,6 @@
     </a>
     <nav class="nav-links">
       <a href="#trabalhos" style="font-size:14px; color:var(--ink-dim);" data-pt="Trabalhos" data-en="Work">Trabalhos</a>
-      <a href="#pessoais" style="font-size:14px; color:var(--ink-dim);" data-pt="Pessoais" data-en="Personal">Pessoais</a>
       <a href="#estudos" style="font-size:14px; color:var(--ink-dim);" data-pt="Estudos" data-en="Studies">Estudos</a>
       <a href="#ai-building" style="font-size:14px; color:var(--ink-dim);" data-pt="AI Building" data-en="AI Building">AI Building</a>
       <a href="#processo" style="font-size:14px; color:var(--ink-dim);" data-pt="Processo" data-en="Process">Processo</a>
@@ -488,15 +486,15 @@
     <div class="glow-pulse" style="position:absolute; top:-200px; left:-140px; width:600px; height:600px; border-radius:50%; background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%); pointer-events:none; z-index:0;"></div>
     <div class="hero-seq-left" style="flex:1.3; display:flex; flex-direction:column; gap:26px; position:relative; z-index:1; min-width:0;">
       <div class="eyebrow" data-pt="Augusto Alves Brasil" data-en="Augusto Alves Brasil">Augusto Alves Brasil</div>
-      <h1 class="hero-title" style="max-width:700px;"
-        data-pt="Product Designer &amp; UX Engineer. Uso IA para acelerar do discovery ao protótipo validado."
-        data-en="Product Designer &amp; UX Engineer. I use AI to move faster from discovery to a validated prototype.">
-        Product Designer &amp; UX Engineer. Uso IA para acelerar do discovery ao protótipo validado.
+      <h1 class="hero-title" style="max-width:700px; font-size:40px;"
+        data-pt="Gestor de TI | Senior Product Designer | UX Engineer"
+        data-en="IT Manager | Senior Product Designer | UX Engineer">
+        Gestor de TI | Senior Product Designer | UX Engineer
       </h1>
       <p style="font-size:18px; max-width:580px;"
-        data-pt="Product Design, UX Engineering e Gestão de TI, aplicados junto com AI Building e Vibe Coding para acelerar pesquisa, arquitetura e design system — e chegar ao time de desenvolvimento com uma base sólida, pronta para virar produto em conjunto."
-        data-en="Product Design, UX Engineering and IT Management, combined with AI Building and Vibe Coding to speed up research, architecture and design systems — arriving at the development team with a solid foundation, ready to become a product together.">
-        Product Design, UX Engineering e Gestão de TI, aplicados junto com AI Building e Vibe Coding para acelerar pesquisa, arquitetura e design system — e chegar ao time de desenvolvimento com uma base sólida, pronta para virar produto em conjunto.
+        data-pt="Product Design cobre pesquisa, arquitetura de produto e design system. Na implementação — arquitetura de sistema, backend, frontend — atuo como UX Engineer, com AI Building e Vibe Coding como parte do processo, junto com o time que constrói. A Gestão de TI entra na governança e na estratégia por trás de tudo isso."
+        data-en="Product Design covers research, product architecture and design systems. On implementation — system architecture, backend, frontend — I work as a UX Engineer, with AI Building and Vibe Coding as part of the process, alongside the team that builds it. IT Management comes in through the governance and strategy behind all of it.">
+        Product Design cobre pesquisa, arquitetura de produto e design system. Na implementação — arquitetura de sistema, backend, frontend — atuo como UX Engineer, com AI Building e Vibe Coding como parte do processo, junto com o time que constrói. A Gestão de TI entra na governança e na estratégia por trás de tudo isso.
       </p>
       <div style="display:flex; gap:16px; margin-top:6px; flex-wrap:wrap;">
         <a href="#trabalhos" class="btn btn-primary" data-pt="Ver trabalhos" data-en="See work">Ver trabalhos</a>
@@ -519,7 +517,7 @@
         </div>
         <div style="display:flex; justify-content:space-between; font-size:14px; gap:12px;">
           <span style="color:var(--ink-dim);" data-pt="Diferencial" data-en="Edge">Diferencial</span>
-          <span data-pt="Gestão de TI &amp; Vibe Coding" data-en="IT Management &amp; Vibe Coding">Gestão de TI &amp; Vibe Coding</span>
+          <span data-pt="UX Engineering &amp; Vibe Coding" data-en="UX Engineering &amp; Vibe Coding">UX Engineering &amp; Vibe Coding</span>
         </div>
       </div>
       <div style="height:1px; background:var(--line);"></div>
@@ -553,21 +551,6 @@
     </p>
 
     <div class="stack-wrap reveal" data-reveal id="stack-trabalhos" data-stack-group="trabalhos"></div>
-  </div>
-
-  <!-- PROJETOS PESSOAIS & PARALELOS -->
-  <div id="pessoais" class="wrap" style="padding-top: 40px; padding-bottom: 120px; border-top:1px solid var(--line);">
-    <div class="reveal" data-reveal style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:12px;">
-      <h2 style="font-size:32px;" data-pt="Projetos pessoais &amp; paralelos" data-en="Personal &amp; side projects">Projetos pessoais &amp; paralelos</h2>
-      <span class="mono" style="font-size:13px; color:var(--ink-dim);" data-pt="01.1 — Fora do expediente" data-en="01.1 — Off the clock">01.1 — Fora do expediente</span>
-    </div>
-    <p class="reveal" data-reveal style="font-size:15px; margin-bottom:48px; max-width:680px;"
-      data-pt="Sites, sistemas e identidades visuais que fiz por conta própria, para comunidades e pessoas próximas — sem cliente institucional por trás, só vontade de resolver o problema de alguém."
-      data-en="Sites, systems and visual identities I built on my own, for communities and people close to me — no institutional client behind them, just wanting to solve someone's actual problem.">
-      Sites, sistemas e identidades visuais que fiz por conta própria, para comunidades e pessoas próximas — sem cliente institucional por trás, só vontade de resolver o problema de alguém.
-    </p>
-
-    <div class="stack-wrap reveal" data-reveal id="stack-pessoais" data-stack-group="pessoais"></div>
   </div>
 
   <!-- PROJETOS DE ESTUDO -->
@@ -686,7 +669,7 @@
 
       <div class="carousel-slide card" style="padding:28px; display:flex; flex-direction:column; gap:16px;">
         <span class="mono" style="font-size:13px; color:var(--accent);">02</span>
-        <h3 style="font-size:19px;" data-pt="Arquitetura" data-en="Architecture">Arquitetura</h3>
+        <h3 style="font-size:19px;" data-pt="Arquitetura de produto e sistema" data-en="Product &amp; system architecture">Arquitetura de produto e sistema</h3>
         <p style="font-size:14px;"
           data-pt="Jornadas, personas e wireframes — da baixa à alta fidelidade. Em produtos próprios, isso inclui também a arquitetura técnica: como o RAG do Tusab busca fontes, como o BI Bridge estrutura o schema semântico."
           data-en="Journeys, personas and wireframes — from low to high fidelity. In my own products, this also includes technical architecture: how Tusab's RAG retrieves sources, how BI Bridge structures its semantic schema.">
@@ -768,7 +751,7 @@
         </div>
       </div>
       <div style="display:flex; flex-direction:column; gap:28px;">
-        <div class="eyebrow" data-pt="AI Building &amp; Gestão de TI" data-en="AI Building &amp; IT Management">AI Building &amp; Gestão de TI</div>
+        <div class="eyebrow" data-pt="UX Engineering &amp; Gestão de TI" data-en="UX Engineering &amp; IT Management">UX Engineering &amp; Gestão de TI</div>
         <div style="display:flex; flex-direction:column; gap:18px;">
           <div style="display:flex; flex-direction:column; gap:8px;">
             <div style="display:flex; justify-content:space-between; font-size:14px;"><span data-pt="Vibe Coding com Claude Code" data-en="Vibe Coding with Claude Code">Vibe Coding com Claude Code</span><span class="mono" style="color:var(--ink-dim);">90%</span></div>
@@ -867,7 +850,7 @@
 // Cartões da pilha de "folhas": conteúdo compacto exibido no topo do baralho.
 var WORK_STACKS = {
   trabalhos: [
-    { slug: 'tusab', eyebrow: { pt: 'Ferramenta própria · AI Building', en: 'Own tool · AI Building' }, title: 'Tusab',
+    { slug: 'tusab', eyebrow: { pt: 'Ferramenta própria · UX Engineering', en: 'Own tool · UX Engineering' }, title: 'Tusab',
       desc: { pt: "Sistema de gestão de conhecimento pessoal com IA local: indexa YouTube, PDFs, áudio e documentos, e permite conversar com esse conteúdo citando a fonte exata — sem alucinação. Nasceu da minha própria frustração como aluno de um curso que publicava mais vídeos do que eu conseguia acompanhar. Passou por três nomes até virar produto — Brain'IAC, Sebayt e por fim Tusab — construído com Claude Code, FastAPI e RAG local (BM25 + reranking).",
         en: "Personal knowledge management system with local AI: indexes YouTube, PDFs, audio and documents, and lets you chat with that content citing the exact source — no hallucination. Born from my own frustration as a student in a course that published more videos than I could keep up with. It went through three names before becoming a product — Brain'IAC, Sebayt, and finally Tusab — built with Claude Code, FastAPI and local RAG (BM25 + reranking)." },
       tags: ['Electron', 'FastAPI', { pt: 'RAG local', en: 'Local RAG' }],
@@ -913,7 +896,7 @@ var WORK_STACKS = {
       desc: { pt: 'Conceito de marketplace que converte custo de aluguel entre pares em desconto de compra futura. Antes de desenhar uma tela, validei a demanda com pesquisa quantitativa (55 respondentes): 95,6% demonstraram interesse na proposta e 78,3% confirmaram interesse específico no mecanismo de conversão aluguel→compra.',
         en: 'Marketplace concept that converts peer-to-peer rental cost into a discount on a future purchase. Before designing a single screen, I validated demand with quantitative research (55 respondents): 95.6% showed interest in the proposal and 78.3% confirmed specific interest in the rental-to-purchase conversion mechanism.' },
       tags: [{ pt: 'Pesquisa quantitativa', en: 'Quantitative research' }, { pt: 'Validação de demanda', en: 'Demand validation' }] },
-    { slug: 'sardinhia', eyebrow: { pt: 'Ferramenta própria · AI Building', en: 'Own tool · AI Building' }, title: 'SardinhIA',
+    { slug: 'sardinhia', eyebrow: { pt: 'Ferramenta própria · UX Engineering', en: 'Own tool · UX Engineering' }, title: 'SardinhIA',
       desc: { pt: 'Assistente de IA construído para a AUVP, com um framework de QA próprio cobrindo 6 pilares de qualidade antes de qualquer resposta ir ao ar. Foi a inspiração inicial que me levou a pensar em IA aplicada a conhecimento — caminho que mais tarde, por outra via, resultou no Tusab.',
         en: 'AI assistant built for AUVP, with a custom QA framework covering 6 quality pillars before any response goes live. It was the initial inspiration that got me thinking about AI applied to knowledge — a path that later, through a different route, led to Tusab.' },
       tags: ['AUVP', { pt: 'Framework de QA', en: 'QA framework' }] },
@@ -921,27 +904,13 @@ var WORK_STACKS = {
       desc: { pt: 'Identidade visual construída em torno de um conceito simbólico: uma releitura do Homem Vitruviano com a serpente Kundalini, ligando tempo, proporção e energia numa mesma figura — do conceito à arte final vetorizada.',
         en: 'Visual identity built around a symbolic concept: a reinterpretation of Vitruvian Man with the Kundalini serpent, tying time, proportion and energy into a single figure — from concept to final vector art.' },
       tags: [{ pt: 'Identidade visual', en: 'Visual identity' }, { pt: 'Conceito simbólico', en: 'Symbolic concept' }] }
-  ],
-  pessoais: [
-    { slug: 'acve', eyebrow: { pt: 'Projeto pessoal · Comunidade', en: 'Personal project · Community' }, title: 'ACVE — Guia de Aruanda',
-      desc: { pt: 'Site e sistema de gestão completos para uma comunidade de Umbanda (Ação Cristã Vovô Elvírio). Não é só um site institucional: por trás dele tem o Iroko, um sistema próprio com portal de membro e um painel interno que funciona como um ERP de comunidade — secretaria, tesouraria, estoque, cantina, calendário — além de um jornal editorial mensal publicado direto pela plataforma.',
-        en: "Full site and management system for an Umbanda community (Ação Cristã Vovô Elvírio). It's not just an institutional site: behind it is Iroko, a custom system with a member portal and an internal panel that works like a community ERP — front desk, treasury, inventory, canteen, calendar — plus a monthly editorial newspaper published straight from the platform." },
-      tags: ['Django', 'Wagtail CMS', { pt: 'Identidade visual', en: 'Visual identity' }] },
-    { slug: 'celuz', eyebrow: { pt: 'Projeto pessoal · Comunidade', en: 'Personal project · Community' }, title: 'CELUZ — Casa Espiritualista Luz de Ramatis',
-      desc: { pt: 'Site institucional e sistema interno para uma casa espírita (doutrina de Ramatis), construídos deliberadamente simples: tudo dentro de um único WordPress, com tema e plugin próprios, sem infraestrutura separada — decisão consciente para caber no orçamento e na realidade de manutenção de uma instituição pequena. Ainda em construção, com identidade visual (azul-noite e dourado) já fechada.',
-        en: 'Institutional site and internal system for a spiritist center (Ramatis doctrine), deliberately kept simple: everything inside a single WordPress, with a custom theme and plugin, no separate infrastructure — a conscious call to fit the budget and upkeep reality of a small institution. Still under construction, with the visual identity (night blue and gold) already locked in.' },
-      tags: ['WordPress', { pt: 'Plugin próprio', en: 'Custom plugin' }, { pt: 'Em construção', en: 'In progress' }] },
-    { slug: 'lisia', eyebrow: { pt: 'Projeto pessoal · Branding', en: 'Personal project · Branding' }, title: 'Lísia — Lettieri Saúde Integrativa',
-      desc: { pt: 'Identidade visual completa para a marca de uma terapeuta/osteopata: logo, paleta, papelaria, kit de redes sociais e até conteúdo educativo em vídeo sobre osteopatia, derivado da mesma peça em três formatos (vídeo, GIF e slide). O menor dos três projetos pessoais, mas o mais fechado — do conceito à aplicação em vestuário.',
-        en: 'Full visual identity for a therapist/osteopath\'s brand: logo, palette, stationery, social media kit, and even educational video content about osteopathy, repurposed from a single piece into three formats (video, GIF and slide deck). The smallest of the three personal projects, but the most self-contained — from concept to apparel application.' },
-      tags: [{ pt: 'Identidade visual', en: 'Visual identity' }, { pt: 'Redes sociais', en: 'Social media' }] }
   ]
 };
 
 // Detalhamento end-to-end dos cases: conteúdo data-driven, renderizado na folha expandida.
 var CASE_DETAILS = {
   tusab: {
-    eyebrow: { pt: 'Ferramenta própria · AI Building', en: 'Own tool · AI Building' },
+    eyebrow: { pt: 'Ferramenta própria · UX Engineering', en: 'Own tool · UX Engineering' },
     narrative: [
       { h: { pt: 'O problema', en: 'The problem' }, b: {
         pt: 'Eu era aluno de um curso que publicava vídeos mais rápido do que eu conseguia assistir. Queria conseguir perguntar "o que esse professor já disse sobre X" e receber uma resposta com a fonte exata — não um resumo genérico, não uma alucinação.',
@@ -1172,7 +1141,7 @@ var CASE_DETAILS = {
     ]
   },
   sardinhia: {
-    eyebrow: { pt: 'Ferramenta própria · AI Building', en: 'Own tool · AI Building' },
+    eyebrow: { pt: 'Ferramenta própria · UX Engineering', en: 'Own tool · UX Engineering' },
     narrative: [
       { h: { pt: 'O que é', en: 'What it is' }, b: {
         pt: 'Um assistente de IA construído para a AUVP — meu primeiro projeto sério aplicando IA a uma base de conhecimento real, e a inspiração inicial que mais tarde, por um caminho totalmente separado (Brain\'IAC → Sebayt), resultou no Tusab.',
@@ -1199,66 +1168,6 @@ var CASE_DETAILS = {
       { src: 'case-media/tempus-meum/Vitruviano-Kundalini.png', caption: { pt: 'Arte-conceito: o Homem Vitruviano com a serpente Kundalini e pontos de energia ao longo da coluna.', en: 'Concept art: Vitruvian Man with the Kundalini serpent and energy points along the spine.' } },
       { src: 'case-media/tempus-meum/Vitruviano-SemFundo.png', caption: { pt: 'Base geométrica clássica de proporções, sem a serpente, em fundo transparente.', en: 'Classical geometric proportion base, without the serpent, on a transparent background.' } },
       { src: 'case-media/tempus-meum/logotipo-tempus-meum.png', caption: { pt: 'Logotipo final da marca Tempus Meum.', en: 'Final Tempus Meum brand logo.' } }
-    ]
-  },
-  acve: {
-    eyebrow: { pt: 'Projeto pessoal · Comunidade', en: 'Personal project · Community' },
-    narrative: [
-      { h: { pt: 'O que é', en: 'What it is' }, b: {
-        pt: 'ACVE é uma comunidade de Umbanda (Ação Cristã Vovô Elvírio, editorialmente publicada como "Guia de Aruanda"). É o mais robusto dos meus projetos pessoais: não é só um site, é uma plataforma completa chamada Iroko, com CMS, portal de membro logado e um painel interno que funciona como um ERP de gestão comunitária.',
-        en: 'ACVE is an Umbanda community (Ação Cristã Vovô Elvírio, editorially published as "Guia de Aruanda"). It\'s the most robust of my personal projects: not just a site, but a full platform called Iroko, with a CMS, a logged-in member portal, and an internal panel that works like a community-management ERP.' } },
-      { h: { pt: 'Como foi construído', en: 'How it was built' }, b: {
-        pt: 'Django com Wagtail CMS, autenticação com MFA, geração de PDF, e três zonas de acesso: área pública, portal do membro (extrato financeiro, recibos) e painel interno (secretaria, tesouraria, estoque, cantina, bazar, calendário). Recentemente passou por adequação a WCAG 2.1 AA nas três áreas, com uma suíte de 131 testes automatizados.',
-        en: 'Django with Wagtail CMS, MFA authentication, PDF generation, and three access zones: public area, member portal (financial statement, receipts) and internal panel (front desk, treasury, inventory, canteen, bazaar, calendar). It recently went through WCAG 2.1 AA compliance work across all three areas, backed by a suite of 131 automated tests.' } },
-      { h: { pt: 'Conteúdo vivo', en: 'Living content' }, b: {
-        pt: 'O sistema publica um jornal editorial mensal ("Estrela Guia de Aruanda") direto pela plataforma, com edições numeradas e colunistas — evidência de que é conteúdo em produção contínua, não um protótipo único.',
-        en: 'The system publishes a monthly editorial newspaper ("Estrela Guia de Aruanda") straight from the platform, with numbered issues and columnists — evidence that it\'s content in continuous production, not a one-off prototype.' } },
-      { h: { pt: 'Identidade visual', en: 'Visual identity' }, b: {
-        pt: 'Paleta roxo-espiritual como cor principal, com dourado, verde, vermelho e azul como secundárias, vinculadas aos orixás/guias — com um customizador de tema no próprio site que permite trocar a paleta em tempo real.',
-        en: 'A "spiritual purple" palette as the primary color, with gold, green, red and blue as secondaries tied to the orixás/guides — with an in-site theme customizer that lets visitors swap the palette in real time.' } }
-    ],
-    media: [
-      { src: 'case-media/acve/screenshot-home.png', caption: { pt: 'Home do site em produção, com o cabeçalho e os destaques de artigos do jornal.', en: 'Live site home, with the header and the newspaper\'s featured articles.' } },
-      { src: 'case-media/acve/logo-acve-principal.png', caption: { pt: 'Logo principal da ACVE (Ação Cristã Vovô Elvírio).', en: 'ACVE\'s main logo (Ação Cristã Vovô Elvírio).' } },
-      { src: 'case-media/acve/logo-acve-ponto-riscado.png', caption: { pt: 'Variante "ponto riscado" do símbolo, remetendo à grafia ritual de Umbanda.', en: '"Ponto riscado" variant of the symbol, referencing the ritual Umbanda script.' } }
-    ]
-  },
-  celuz: {
-    eyebrow: { pt: 'Projeto pessoal · Comunidade', en: 'Personal project · Community' },
-    narrative: [
-      { h: { pt: 'O que é', en: 'What it is' }, b: {
-        pt: 'CELUZ é uma casa espírita (doutrina de Ramatis). Ao contrário do ACVE, aqui a arquitetura foi deliberadamente mais simples: um único WordPress cobrindo site público e sistema interno de gestão — tudo como conteúdo, plugins e papéis de usuário dentro do mesmo WordPress, sem aplicação separada.',
-        en: 'CELUZ is a spiritist center (Ramatis doctrine). Unlike ACVE, the architecture here was deliberately kept simple: a single WordPress install covering both the public site and the internal management system — everything as content, plugins and user roles within the same WordPress, no separate application.' } },
-      { h: { pt: 'Por que essa escolha', en: 'Why this choice' }, b: {
-        pt: 'Hospedagem compartilhada, orçamento pequeno e uma instituição sem equipe técnica própria pedem simplicidade auditável, não arquitetura elegante. Um plugin próprio (sem dependências externas via Composer) cobre 8 tipos de conteúdo — ensinamentos, atendimentos, agenda, biblioteca, orações, projeto social, FAQ e galeria — com papéis diferenciados (tesouraria, coordenação de escalas, bibliotecário).',
-        en: 'Shared hosting, a small budget, and an institution with no dedicated tech team call for auditable simplicity, not elegant architecture. A custom plugin (no external Composer dependencies) covers 8 content types — teachings, spiritual sessions, agenda, library, prayers, social project, FAQ and gallery — with distinct roles (treasury, shift coordination, librarian).' } },
-      { h: { pt: 'Onde está hoje', en: 'Where it stands today' }, b: {
-        pt: 'Ainda em construção — a identidade visual (azul-noite e dourado, tipografia Fraunces + Inter, já validada em contraste WCAG AA) está fechada, mas o wordmark final (símbolo + nome por escrito) ainda não foi produzido. Prefiro nomear isso como um projeto em andamento a apresentá-lo como pronto.',
-        en: 'Still under construction — the visual identity (night blue and gold, Fraunces + Inter typography, already validated for WCAG AA contrast) is locked in, but the final wordmark (symbol + written name) hasn\'t been produced yet. I\'d rather call this a work in progress than present it as finished.' } }
-    ],
-    media: [
-      { src: 'case-media/celuz/logo-fundo-escuro.png', caption: { pt: 'Símbolo da CELUZ sobre fundo escuro.', en: 'CELUZ symbol on a dark background.' } },
-      { src: 'case-media/celuz/logo-fundo-translucido.png', caption: { pt: 'Símbolo da CELUZ em branco, versão translúcida para aplicações claras.', en: 'CELUZ symbol in white, translucent version for light applications.' } }
-    ]
-  },
-  lisia: {
-    eyebrow: { pt: 'Projeto pessoal · Branding', en: 'Personal project · Branding' },
-    narrative: [
-      { h: { pt: 'O que é', en: 'What it is' }, b: {
-        pt: 'Um trabalho de branding para Lísia Lettieri Vidal, terapeuta e osteopata, para sua marca "Lettieri Saúde Integrativa". O menor e mais autocontido dos meus projetos pessoais: puramente identidade visual e materiais de aplicação, sem componente de software.',
-        en: 'A branding project for Lísia Lettieri Vidal, a therapist and osteopath, for her brand "Lettieri Saúde Integrativa". The smallest and most self-contained of my personal projects: purely visual identity and applied materials, no software component.' } },
-      { h: { pt: 'O que foi entregue', en: 'What was delivered' }, b: {
-        pt: 'Logo em duas versões de cor, com variações sazonais (Outubro Rosa, Novembro Azul, Natal); papelaria aplicada (papel timbrado, voucher); kit completo de redes sociais (capas, perfil, stories); e uma peça sobre "O que é Osteopatia" produzida em três formatos a partir do mesmo conteúdo — vídeo, GIF e apresentação.',
-        en: 'Logo in two color versions, with seasonal variants (Breast Cancer Awareness, Blue November, Christmas); applied stationery (letterhead, voucher); a full social media kit (covers, profile, stories); and a piece on "What is Osteopathy" produced in three formats from the same content — video, GIF and slide deck.' } },
-      { h: { pt: 'Um conceito, múltiplos formatos', en: 'One concept, multiple formats' }, b: {
-        pt: 'O trabalho também inclui um vídeo institucional dedicado e fotos de aplicação da marca em vestuário — mostrando a marca em uso real, não só como arte final estática.',
-        en: 'The work also includes a dedicated institutional video and photos of the brand applied to apparel — showing the brand in real use, not just as static final art.' } }
-    ],
-    media: [
-      { src: 'case-media/lisia/logo-lettieri.png', caption: { pt: 'Logotipo Lettieri Saúde Integrativa.', en: 'Lettieri Saúde Integrativa logo.' } },
-      { src: 'case-media/lisia/paleta-cores.jpg', caption: { pt: 'Paleta de cores da marca.', en: 'Brand color palette.' } },
-      { src: 'case-media/lisia/aplicacao-papel-timbrado.png', caption: { pt: 'Aplicação da marca em papel timbrado.', en: 'Brand application on letterhead.' } },
-      { src: 'case-media/lisia/aplicacao-capa-redes-sociais.png', caption: { pt: 'Aplicação da marca em capa de rede social.', en: 'Brand application on a social media cover.' } }
     ]
   }
 };
@@ -1499,6 +1408,21 @@ var CASE_DETAILS = {
         collapseAndAdvance(groupKey);
       });
     }
+
+    positionNavButtons(container, stackEl);
+  }
+
+  function positionNavButtons(container, stackEl) {
+    var prevBtn = container.querySelector('.stack-nav-prev');
+    var nextBtn = container.querySelector('.stack-nav-next');
+    if (!prevBtn || !nextBtn) return;
+    // Center vertically on the .stack card itself (not the whole wrap, which also
+    // includes heading/intro text above it and would misplace the buttons).
+    var top = stackEl.offsetTop + stackEl.offsetHeight / 2;
+    prevBtn.style.top = top + 'px';
+    nextBtn.style.top = top + 'px';
+    prevBtn.style.transform = 'translateY(-50%)';
+    nextBtn.style.transform = 'translateY(-50%)';
   }
 
   function expandTop(groupKey) {
@@ -1518,10 +1442,6 @@ var CASE_DETAILS = {
     state.expandedIndex = null;
     state.order.push(state.order.shift());
     renderStack(groupKey);
-    if (container) {
-      var top = container.getBoundingClientRect().top + window.scrollY - 24;
-      window.scrollTo({ top: top, behavior: 'smooth' });
-    }
   }
 
   function navigateExpanded(groupKey, dir) {
