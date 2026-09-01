@@ -1374,7 +1374,7 @@ var CASE_DETAILS = {
       var isTop = position === 0;
       var isExpanded = state.expandedIndex === cardIndex;
       el.className = 'stack-card' + (isTop || isExpanded ? '' : ' stack-card-back') + (isExpanded ? ' is-expanded' : '');
-      if (position > MAX_VISIBLE_BACK) el.classList.add('stack-card-hidden');
+      if (position > MAX_VISIBLE_BACK && !isExpanded) el.classList.add('stack-card-hidden');
       if (isExpanded) {
         el.style.transform = 'none';
         el.style.zIndex = 50;
