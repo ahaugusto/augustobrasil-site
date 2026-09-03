@@ -151,6 +151,34 @@
   html[data-theme="light"] .icon-btn .icon-sun { display: none; }
   html[data-theme="light"] .icon-btn .icon-moon { display: block; }
 
+  .back-to-top {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 44px;
+    height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--bg-raised);
+    backdrop-filter: blur(6px);
+    cursor: pointer;
+    z-index: 90;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(8px);
+    transition: opacity 0.25s ease, transform 0.25s ease, border-color 0.2s ease, visibility 0.25s;
+  }
+  .back-to-top.is-visible { opacity: 1; visibility: visible; transform: translateY(0); }
+  .back-to-top:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .back-to-top svg { stroke: var(--ink); display: block; }
+  @media (prefers-reduced-motion: reduce) {
+    .back-to-top { transition: opacity 0.25s ease, visibility 0.25s; }
+    .back-to-top:hover { transform: none; }
+  }
+
   .lang-btn { border-radius: 999px; }
   .lang-btn:hover { transform: none; }
 
@@ -546,8 +574,8 @@
     </a>
     <nav class="nav-links">
       <a href="#trabalhos" style="font-size:14px; color:var(--ink-dim);" data-pt="Trabalhos" data-en="Work">Trabalhos</a>
-      <a href="#estudos" style="font-size:14px; color:var(--ink-dim);" data-pt="Estudos" data-en="Studies">Estudos</a>
       <a href="#ai-building" style="font-size:14px; color:var(--ink-dim);" data-pt="AI Building" data-en="AI Building">AI Building</a>
+      <a href="#estudos" style="font-size:14px; color:var(--ink-dim);" data-pt="Estudos" data-en="Studies">Estudos</a>
       <a href="#skills" style="font-size:14px; color:var(--ink-dim);" data-pt="Skills" data-en="Skills">Skills</a>
       <a href="#contato" style="font-size:14px; color:var(--ink-dim);" data-pt="Contato" data-en="Contact">Contato</a>
     </nav>
@@ -635,42 +663,8 @@
     <div class="stack-wrap reveal" data-reveal id="stack-trabalhos" data-stack-group="trabalhos"></div>
   </div>
 
-  <!-- PROJETOS DE ESTUDO -->
-  <div id="estudos" class="wrap" style="padding-top: 40px; padding-bottom: 120px; border-top:1px solid var(--line);">
-    <div class="reveal" data-reveal style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:12px;">
-      <h2 style="font-size:32px;" data-pt="Projetos de estudo" data-en="Study projects">Projetos de estudo</h2>
-      <span class="mono" style="font-size:13px; color:var(--ink-dim);" data-pt="01.2 — Prática" data-en="01.2 — Practice">01.2 — Prática</span>
-    </div>
-    <p class="reveal" data-reveal style="font-size:15px; margin-bottom:48px; max-width:680px;"
-      data-pt="Exercícios de formação, não trabalhos para cliente — usados para praticar técnicas específicas de UX/UI e Figma avançado."
-      data-en="Training exercises, not client work — used to practice specific UX/UI techniques and advanced Figma.">
-      Exercícios de formação, não trabalhos para cliente — usados para praticar técnicas específicas de UX/UI e Figma avançado.
-    </p>
-
-    <div class="reveal-stagger study-grid" data-reveal>
-      <a href="https://www.figma.com/community/file/1409932332742817466/nabook-aprender-e-divertido" target="_blank" rel="noopener" class="card row-hover" style="padding:28px; display:flex; flex-direction:column; gap:10px;">
-        <span class="eyebrow" data-pt="Exercício de certificação" data-en="Certification exercise">Exercício de certificação</span>
-        <span style="color:var(--ink); font-size:18px; font-family:'Quicksand',sans-serif; font-weight:600;">Nabook — Aprender e Divertido ↗</span>
-        <span style="font-size:13.5px; color:var(--ink-dim);"
-          data-pt="Projeto feito para a certificação de Especialista em UX e UI."
-          data-en="Project made for the UX/UI Specialist certification.">
-          Projeto feito para a certificação de Especialista em UX e UI.
-        </span>
-      </a>
-      <a href="https://www.figma.com/community/file/1385253487036788968/the-gamer-screen-project" target="_blank" rel="noopener" class="card row-hover" style="padding:28px; display:flex; flex-direction:column; gap:10px;">
-        <span class="eyebrow" data-pt="Exercício de curso" data-en="Course exercise">Exercício de curso</span>
-        <span style="color:var(--ink); font-size:18px; font-family:'Quicksand',sans-serif; font-weight:600;">The Gamer Screen Project ↗</span>
-        <span style="font-size:13.5px; color:var(--ink-dim);"
-          data-pt="Projeto de um curso de Figma avançado."
-          data-en="Project from an advanced Figma course.">
-          Projeto de um curso de Figma avançado.
-        </span>
-      </a>
-    </div>
-  </div>
-
   <!-- AI BUILDING -->
-  <div id="ai-building" class="wrap" style="padding-bottom: 120px;">
+  <div id="ai-building" class="wrap" style="padding-top: 40px; padding-bottom: 120px; border-top:1px solid var(--line);">
     <div class="reveal ai-row card" data-reveal style="padding: 56px;">
       <div style="flex:1.2; display:flex; flex-direction:column; gap:18px;">
         <div class="eyebrow" data-pt="AI Building &amp; Vibe Coding" data-en="AI Building &amp; Vibe Coding">AI Building &amp; Vibe Coding</div>
@@ -709,6 +703,40 @@
           </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <!-- PROJETOS DE ESTUDO -->
+  <div id="estudos" class="wrap" style="padding-top: 40px; padding-bottom: 120px; border-top:1px solid var(--line);">
+    <div class="reveal" data-reveal style="display:flex; align-items:baseline; justify-content:space-between; margin-bottom:12px; flex-wrap:wrap; gap:12px;">
+      <h2 style="font-size:32px;" data-pt="Projetos de estudo" data-en="Study projects">Projetos de estudo</h2>
+      <span class="mono" style="font-size:13px; color:var(--ink-dim);" data-pt="01.2 — Prática" data-en="01.2 — Practice">01.2 — Prática</span>
+    </div>
+    <p class="reveal" data-reveal style="font-size:15px; margin-bottom:48px; max-width:680px;"
+      data-pt="Exercícios de formação, não trabalhos para cliente — usados para praticar técnicas específicas de UX/UI e Figma avançado."
+      data-en="Training exercises, not client work — used to practice specific UX/UI techniques and advanced Figma.">
+      Exercícios de formação, não trabalhos para cliente — usados para praticar técnicas específicas de UX/UI e Figma avançado.
+    </p>
+
+    <div class="reveal-stagger study-grid" data-reveal>
+      <a href="https://www.figma.com/community/file/1409932332742817466/nabook-aprender-e-divertido" target="_blank" rel="noopener" class="card row-hover" style="padding:28px; display:flex; flex-direction:column; gap:10px;">
+        <span class="eyebrow" data-pt="Exercício de certificação" data-en="Certification exercise">Exercício de certificação</span>
+        <span style="color:var(--ink); font-size:18px; font-family:'Quicksand',sans-serif; font-weight:600;">Nabook — Aprender e Divertido ↗</span>
+        <span style="font-size:13.5px; color:var(--ink-dim);"
+          data-pt="Projeto feito para a certificação de Especialista em UX e UI."
+          data-en="Project made for the UX/UI Specialist certification.">
+          Projeto feito para a certificação de Especialista em UX e UI.
+        </span>
+      </a>
+      <a href="https://www.figma.com/community/file/1385253487036788968/the-gamer-screen-project" target="_blank" rel="noopener" class="card row-hover" style="padding:28px; display:flex; flex-direction:column; gap:10px;">
+        <span class="eyebrow" data-pt="Exercício de curso" data-en="Course exercise">Exercício de curso</span>
+        <span style="color:var(--ink); font-size:18px; font-family:'Quicksand',sans-serif; font-weight:600;">The Gamer Screen Project ↗</span>
+        <span style="font-size:13.5px; color:var(--ink-dim);"
+          data-pt="Projeto de um curso de Figma avançado."
+          data-en="Project from an advanced Figma course.">
+          Projeto de um curso de Figma avançado.
+        </span>
+      </a>
     </div>
   </div>
 
@@ -947,6 +975,25 @@
   <img id="lightbox-img" src="" alt="">
   <div class="lightbox-caption" id="lightbox-caption"></div>
 </div>
+
+<button class="back-to-top" id="back-to-top" aria-label="Voltar ao topo" title="Voltar ao topo">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+</button>
+
+<script>
+(function () {
+  var btn = document.getElementById('back-to-top');
+  function toggleBtn() {
+    if (window.scrollY > 480) btn.classList.add('is-visible');
+    else btn.classList.remove('is-visible');
+  }
+  window.addEventListener('scroll', toggleBtn, { passive: true });
+  toggleBtn();
+  btn.addEventListener('click', function () {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+})();
+</script>
 
 <script>
 // Cartões da pilha de "folhas": conteúdo compacto exibido no topo do baralho.
